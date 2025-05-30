@@ -147,7 +147,7 @@ const FormMessage = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? '') : children;
-
+  console.log('body', body);
   if (!body) {
     return (
       <p
@@ -159,7 +159,7 @@ const FormMessage = React.forwardRef<
         )}
         {...props}
       >
-        비어있어용
+        비어있음
       </p>
     );
   }
