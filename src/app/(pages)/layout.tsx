@@ -1,6 +1,7 @@
 import { Geist } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import '@/app/globals.css';
+import { TanstackQueryProvider } from '@/shared/providers';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -31,9 +32,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className='w-full min-h-dvh min-w-[1280px] max-w-[1920px] flex flex-col items-center'>
-            {children}
-          </main>
+          <TanstackQueryProvider>
+            <main className='w-full min-h-dvh min-w-[1280px] max-w-[1920px] flex flex-col items-center'>
+              {children}
+            </main>
+          </TanstackQueryProvider>
         </ThemeProvider>
       </body>
     </html>

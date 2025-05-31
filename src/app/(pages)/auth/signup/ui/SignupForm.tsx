@@ -8,8 +8,21 @@ import { useForm } from 'react-hook-form';
 import GenderPopover from './GenderPopover';
 import CalendarPopover from './CalendarPopover';
 import { AuthInput } from '@/entities/auth/ui';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { signUp } from '@/entities/auth/api';
 
 export default function SignupForm() {
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: signUp,
+    onSuccess: () => {
+      queryClient.resetQueries();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const form = useForm<SignUpFormType>({
     resolver: zodResolver(signUpSchema),
     mode: 'onTouched',
@@ -17,17 +30,30 @@ export default function SignupForm() {
       email: '',
       nickname: '',
       password: '',
+      phone: '',
       confirmPassword: '',
-      valorantNickname: '',
+      game_nickname: '',
       gender: undefined,
       birthday: undefined,
     },
   });
 
   const onSubmit = (data: SignUpFormType) => {
-    // TODO: 실제 회원가입 처리 로직
-    // eslint-disable-next-line no-console
-    console.log(data);
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && key !== 'confirmPassword') {
+        // birthday는 YYYY-MM-DD로 변환
+        if (key === 'birthday' && value instanceof Date) {
+          formData.append(key, value.toISOString().slice(0, 10));
+        } else {
+          formData.append(
+            key,
+            value instanceof Date ? value.toISOString() : String(value)
+          );
+        }
+      }
+    });
+    mutate(formData);
   };
 
   return (
@@ -40,19 +66,13 @@ export default function SignupForm() {
           placeholder='비밀번호 확인'
           type='password'
         />
+        <AuthInput form={form} name='nickname' placeholder='닉네임' />
         <AuthInput
           form={form}
-          name='nickname'
-          placeholder='닉네임'
-          type='text'
+          name='game_nickname'
+          placeholder='게임 닉네임(ex. player#KR1)'
         />
-        <AuthInput
-          form={form}
-          name='valorantNickname'
-          placeholder='발로란트 닉네임'
-          type='text'
-        />
-
+        <AuthInput form={form} name='phone' placeholder='전화번호' />
         <div className='flex gap-4'>
           <FormField
             control={form.control}
