@@ -13,6 +13,16 @@ import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/button';
 import { SignUpFormType } from '../model/schema';
 import { AuthInput } from './AuthInput';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from '@/shared/ui/dialog';
+import Link from 'next/link';
+import { DialogTitle } from '@radix-ui/react-dialog';
+import AuthButton from './AuthButton';
 
 /**
  * 인증 공통 폼 UI (이메일, 비밀번호, 성별, 생년월일)
@@ -21,10 +31,16 @@ import { AuthInput } from './AuthInput';
 export interface AuthFormProps {
   form: any;
   onSubmit: (data: any) => void;
+  formType?: string;
   children?: React.ReactNode;
 }
 
-export function AuthForm({ form, onSubmit, children }: AuthFormProps) {
+export function AuthForm({
+  form,
+  onSubmit,
+  children,
+  formType = 'login',
+}: AuthFormProps) {
   return (
     <Form {...form}>
       <form
@@ -40,9 +56,7 @@ export function AuthForm({ form, onSubmit, children }: AuthFormProps) {
         />
 
         {children}
-        <Button type='submit' variant='default'>
-          확인
-        </Button>
+        <AuthButton formType={formType} form={form} />
       </form>
     </Form>
   );

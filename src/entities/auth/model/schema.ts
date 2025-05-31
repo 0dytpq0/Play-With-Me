@@ -21,9 +21,9 @@ export const signUpSchema = z
       message:
         '발로란트 닉네임은 "이름#태그" 형식이어야 합니다. 예: player#KR1',
     }),
-    phone: z
-      .string()
-      .min(10, { message: '전화번호는 최소 10자 이상이어야 합니다.' }),
+    phone: z.string().regex(/^\d{10,11}$/, {
+      message: '전화번호는 숫자만 10~11자리로 입력해주세요.',
+    }),
     gender: z.enum(
       [...GENDER_OPTIONS.map((g) => g.value)] as [string, ...string[]],
       { required_error: '성별을 선택해주세요.' }

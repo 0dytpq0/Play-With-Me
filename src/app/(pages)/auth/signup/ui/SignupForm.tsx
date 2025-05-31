@@ -59,7 +59,7 @@ export default function SignupForm() {
   return (
     <div className='flex flex-col items-center gap-4 justify-center '>
       <h1 className='text-2xl font-bold mt-4'>회원가입</h1>
-      <AuthForm form={form} onSubmit={onSubmit}>
+      <AuthForm form={form} onSubmit={onSubmit} formType='signup'>
         <AuthInput
           form={form}
           name='confirmPassword'
