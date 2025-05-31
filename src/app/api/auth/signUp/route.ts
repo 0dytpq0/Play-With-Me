@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     email,
     password,
     options: {
-      emailRedirectTo: `${origin}/auth/callback`,
+      emailRedirectTo: `${origin}/api/auth/callback`,
       data: {
         nickname,
         game_nickname,
