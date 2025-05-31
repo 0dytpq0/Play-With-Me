@@ -1,25 +1,24 @@
-/**
- * 회원가입 API 요청 함수 (클라이언트)
- * @param formData - FormData 객체 (email, password, nickname, game_nickname, gender, birthday 포함)
- * @returns 서버에서 반환한 결과(status, message)
- */
-export const signUp = async (
+export const signup = async (
   formData: FormData
 ): Promise<{ status: string; message: string }> => {
-  console.log('formData', formData);
   try {
-    const res = await fetch('http://localhost:3000/api/auth/signUp', {
+    const res = await fetch('http://localhost:3000/api/auth/signup', {
       method: 'POST',
       body: formData,
     });
     const result = await res.json();
+    if (!res.ok) {
+      throw new Error(result.message || '회원가입에 실패했습니다.');
+    }
     return result;
   } catch (error) {
-    console.log(123124124);
-    console.error(error as Error);
+    console.error('회원가입 에러 :', error);
     return {
       status: 'error',
-      message: (error as Error).message,
+      message:
+        error instanceof Error
+          ? error.message
+          : '알 수 없는 오류가 발생했습니다.',
     };
   }
 };

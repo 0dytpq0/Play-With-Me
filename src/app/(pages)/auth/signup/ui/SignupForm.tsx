@@ -9,12 +9,12 @@ import GenderPopover from './GenderPopover';
 import CalendarPopover from './CalendarPopover';
 import { AuthInput } from '@/entities/auth/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signUp } from '@/entities/auth/api';
+import { signup } from '@/entities/auth/api';
 
 export default function SignupForm() {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: signUp,
+    mutationFn: signup,
     onSuccess: () => {
       queryClient.resetQueries();
     },
@@ -99,4 +99,3 @@ export default function SignupForm() {
     </div>
   );
 }
-
