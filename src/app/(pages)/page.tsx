@@ -25,7 +25,7 @@ export default async function Home() {
             size='lg'
             className='w-full bg-purple-600 hover:bg-purple-700 text-white hover:scale-105 transition-all duration-200 ease-in-out'
           >
-            <Link href={session ? '/protected/main' : '/auth/login'}>
+            <Link href={session ? '/protected/home' : '/auth/login'}>
               매칭 시작하기
             </Link>
           </Button>

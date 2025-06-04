@@ -8,17 +8,11 @@ import type { LoginFormType } from '@/entities/auth/model/types';
 import { useLogin } from '../hooks/useLogin';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import {
-  ArrowRightIcon,
-  Cross2Icon,
-  LockClosedIcon,
-} from '@radix-ui/react-icons';
-import { useRouter } from 'next/navigation';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { BackButton } from '@/shared/ui/backButton';
 import { toLoginFormData } from '@/entities/lib/formData';
 
 export function LoginForm() {
-  const router = useRouter();
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
@@ -49,4 +43,3 @@ export function LoginForm() {
     </div>
   );
 }
-
