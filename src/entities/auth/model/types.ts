@@ -8,9 +8,8 @@ export type SignUpFormType = {
   password: string;
   confirmPassword: string;
   nickname: string;
-  game_nickname?: string;
-  phone?: string;
-  gender?: string;
-  birthday?: Date;
+  game_nickname: string;
+  phone: string;
+  gender: string;
+  birthday: Date;
 };
-
