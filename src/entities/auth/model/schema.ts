@@ -1,6 +1,7 @@
 'use client';
 
 import { z } from 'zod';
+import { LoginFormType, SignUpFormType } from './types';
 
 export const GENDER_OPTIONS = [
   { value: 'male', label: '남성' },
@@ -33,7 +34,11 @@ export const signUpSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다.',
     path: ['confirmPassword'],
-  });
+  }) satisfies z.ZodType<SignUpFormType>;
 
-export type SignUpFormType = z.infer<typeof signUpSchema>;
-
+export const loginSchema = z.object({
+  email: z.string().email({ message: '이메일 형식이 올바르지 않습니다.' }),
+  password: z
+    .string()
+    .min(6, { message: '비밀번호는 최소 6자 이상이어야 합니다.' }),
+}) satisfies z.ZodType<LoginFormType>;
