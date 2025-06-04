@@ -33,7 +33,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TanstackQueryProvider>
-            <main className='w-full min-h-dvh min-w-[1280px] max-w-[1920px] flex flex-col items-center'>
+            <main className='w-full min-h-dvh min-w-[1280px] max-w-[1920px]'>
               {children}
             </main>
           </TanstackQueryProvider>
@@ -42,4 +42,3 @@ export default function RootLayout({
     </html>
   );
 }
-
