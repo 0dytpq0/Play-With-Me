@@ -1,27 +1,18 @@
 'use client';
 
-import { SignUpFormType, signUpSchema } from '@/entities/auth/model/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthForm } from '@/entities/auth/ui/AuthForm';
-import { FormField, FormItem, FormMessage } from '@/shared/ui/form';
 import { useForm } from 'react-hook-form';
-import GenderPopover from './GenderPopover';
-import CalendarPopover from './CalendarPopover';
+import { signUpSchema } from '@/entities/auth/model/schema';
+import { useSignup } from '../hooks/useSignup';
+import { AuthForm } from '@/entities/auth/ui/AuthForm';
 import { AuthInput } from '@/entities/auth/ui';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signup } from '@/entities/auth/api';
+import { FormField, FormItem, FormMessage } from '@/shared/ui/form';
+import GenderPopover from '@/entities/auth/ui/GenderPopover';
+import CalendarPopover from '@/entities/auth/ui/CalendarPopover';
+import { SignUpFormType } from '@/entities/auth/model/types';
 
-export default function SignupForm() {
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation({
-    mutationFn: signup,
-    onSuccess: () => {
-      queryClient.resetQueries();
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+export function SignupForm() {
+  const { mutate } = useSignup();
 
   const form = useForm<SignUpFormType>({
     resolver: zodResolver(signUpSchema),
@@ -42,7 +33,6 @@ export default function SignupForm() {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined && value !== null && key !== 'confirmPassword') {
-        // birthday는 YYYY-MM-DD로 변환
         if (key === 'birthday' && value instanceof Date) {
           formData.append(key, value.toISOString().slice(0, 10));
         } else {
@@ -99,3 +89,4 @@ export default function SignupForm() {
     </div>
   );
 }
+

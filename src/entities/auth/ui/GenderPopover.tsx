@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { FormControl } from '@/shared/ui/form';
 import { ControllerRenderProps } from 'react-hook-form';
-import { SignUpFormType } from '@/entities/auth/model/schema';
+import { SignUpFormType } from '../model/types';
 
 export default function GenderPopover({
   field,
