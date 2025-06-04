@@ -8,6 +8,9 @@ import { login } from '@/entities/auth/api/login';
 import { useMutation } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { Button } from '@/shared/ui/button';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const queryClient = useQueryClient();
@@ -40,7 +43,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className='flex flex-col items-center gap-4 justify-center'>
+    <div className='relative flex flex-col items-center gap-4 justify-center'>
+      <Button asChild variant={'link'} className='absolute top-1 right-1'>
+        <Link href={'/auth/signup'} className='flex items-center gap-1'>
+          회원가입
+          <ArrowRightIcon />{' '}
+        </Link>
+      </Button>
       <h1 className='text-2xl font-bold mt-4'>로그인</h1>
       <AuthForm formType='login' form={form} onSubmit={onSubmit} />
     </div>
