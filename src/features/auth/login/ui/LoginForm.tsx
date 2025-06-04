@@ -13,9 +13,9 @@ import {
   Cross2Icon,
   LockClosedIcon,
 } from '@radix-ui/react-icons';
-import { Router } from 'next/router';
 import { useRouter } from 'next/navigation';
 import { BackButton } from '@/shared/ui/backButton';
+import { toLoginFormData } from '@/entities/lib/formData';
 
 export function LoginForm() {
   const router = useRouter();
@@ -28,10 +28,7 @@ export function LoginForm() {
   const { mutate } = useLogin();
 
   const onSubmit = (data: LoginFormType) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+    const formData = toLoginFormData(data);
     mutate(formData);
   };
 

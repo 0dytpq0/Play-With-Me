@@ -11,6 +11,7 @@ import GenderPopover from '@/entities/auth/ui/GenderPopover';
 import CalendarPopover from '@/entities/auth/ui/CalendarPopover';
 import { SignUpFormType } from '@/entities/auth/model/types';
 import { BackButton } from '@/shared/ui/backButton';
+import { toSignupFormData } from '@/entities/lib/formData';
 
 export function SignupForm() {
   const { mutate } = useSignup();
@@ -31,19 +32,7 @@ export function SignupForm() {
   });
 
   const onSubmit = (data: SignUpFormType) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && key !== 'confirmPassword') {
-        if (key === 'birthday' && value instanceof Date) {
-          formData.append(key, value.toISOString().slice(0, 10));
-        } else {
-          formData.append(
-            key,
-            value instanceof Date ? value.toISOString() : String(value)
-          );
-        }
-      }
-    });
+    const formData = toSignupFormData(data);
     mutate(formData);
   };
 
