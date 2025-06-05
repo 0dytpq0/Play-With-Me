@@ -1,7 +1,9 @@
 import GlazeBox from '@/shared/ui/glazeBox';
-import MePage from '../me/page';
+import { getUser } from '@/entities/user/api/getUser';
+import { ProfileSection } from '@/widgets/profileSection/profileSection';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getUser();
   return (
     <div>
       <main className='w-full mx-auto h-dvh flex flex-col md:flex-row justify-center p-8 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 text-white'>
@@ -53,7 +55,7 @@ export default function HomePage() {
           </div>
           <div className='flex-1 flex flex-col gap-4 items-center'>
             <GlazeBox className='w-full min-h-[300px]'>
-              <MePage />
+              <ProfileSection user={user} />
             </GlazeBox>
             <GlazeBox className='w-full flex-1'>
               <div>
