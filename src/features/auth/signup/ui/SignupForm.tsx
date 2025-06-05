@@ -11,7 +11,7 @@ import GenderPopover from '@/entities/auth/ui/GenderPopover';
 import CalendarPopover from '@/entities/auth/ui/CalendarPopover';
 import { SignUpFormType } from '@/entities/auth/model/types';
 import { BackButton } from '@/shared/ui/backButton';
-import { toSignupFormData } from '@/entities/lib/formData';
+import { toSignupFormData } from '@/entities/auth/lib/formData';
 
 export function SignupForm() {
   const { mutate } = useSignup();

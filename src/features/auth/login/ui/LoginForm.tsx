@@ -10,7 +10,7 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { BackButton } from '@/shared/ui/backButton';
-import { toLoginFormData } from '@/entities/lib/formData';
+import { toLoginFormData } from '@/entities/auth/lib/formData';
 
 export function LoginForm() {
   const form = useForm<LoginFormType>({
