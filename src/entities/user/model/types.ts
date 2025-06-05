@@ -7,6 +7,7 @@ export type User = {
   birthday: string;
   created_at: string;
   phone: string;
+  profile_image?: string;
   tier?: number;
   one_line?: string;
 };

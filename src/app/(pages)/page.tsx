@@ -23,7 +23,7 @@ export default async function Home() {
           <Button
             asChild
             size='lg'
-            className='w-full bg-purple-600 hover:bg-purple-700 text-white hover:scale-105 transition-all duration-200 ease-in-out'
+            className='w-full bg-purple-600 hover:bg-purple-700'
           >
             <Link href={session ? '/protected/home' : '/auth/login'}>
               매칭 시작하기
@@ -34,7 +34,7 @@ export default async function Home() {
             asChild
             size='lg'
             variant={'outline'}
-            className='w-full border-sky-500 text-sky-400 hover:bg-sky-500 hover:text-white hover:scale-105 transition-all duration-200 ease-in-out'
+            className='w-full border-sky-500 text-sky-400 hover:bg-sky-500 hover:text-white'
           >
             <Link href='/auth/login'>로그인</Link>
           </Button>
@@ -42,7 +42,7 @@ export default async function Home() {
             asChild
             size='lg'
             variant={'outline'}
-            className='w-full border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white hover:scale-105 transition-all duration-200 ease-in-out'
+            className='w-full border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white'
           >
             <Link href='/auth/signup'>회원가입</Link>
           </Button>
