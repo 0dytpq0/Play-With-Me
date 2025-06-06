@@ -10,6 +10,7 @@ import { cn } from '@/shared/lib/utils';
  * @param className 추가 클래스
  * @param props div props
  */
+
 export function UserAvatar({
   user,
   className,

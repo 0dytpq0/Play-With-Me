@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/shared/ui/button';
 import { useRouter } from 'next/navigation';
 import { Cross2Icon } from '@radix-ui/react-icons';
