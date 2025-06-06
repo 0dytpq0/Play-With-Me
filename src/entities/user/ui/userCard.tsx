@@ -1,15 +1,20 @@
 import Image from 'next/image';
 import { User } from '../model/types';
+import { ComponentProps } from 'react';
+import { cn } from '@/shared/lib/utils';
 
-interface UserCardProps {
+type UserCardProps = {
   user: Pick<User, 'id' | 'game_nickname' | 'tier' | 'one_line'>;
-}
+} & ComponentProps<'div'>;
 
-export function UserCard({ user }: UserCardProps) {
+export function UserCard({ user, className, ...props }: UserCardProps) {
   const [nickname, tag] = user.game_nickname.split('#');
   return (
     <>
-      <div className='w-full flex items-center gap-2'>
+      <div
+        className={cn('w-full flex items-center gap-2', className)}
+        {...props}
+      >
         <div className='relative aspect-auto w-12 h-12'>
           <Image
             src={`/tier/${user.tier}.png`}
