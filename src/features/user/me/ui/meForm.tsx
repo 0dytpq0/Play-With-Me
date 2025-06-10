@@ -5,7 +5,6 @@ import { BackButton } from '@/shared/ui/backButton';
 import { Button } from '@/shared/ui/button';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { User } from '@/entities/user/model/types';
 import { UserCard } from '@/entities/user/ui/userCard';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
