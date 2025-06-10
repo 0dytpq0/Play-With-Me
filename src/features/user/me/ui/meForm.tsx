@@ -4,32 +4,29 @@ import type { JSX } from 'react';
 import { BackButton } from '@/shared/ui/backButton';
 import { Button } from '@/shared/ui/button';
 import { Pencil2Icon } from '@radix-ui/react-icons';
-import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { User } from '@/entities/user/model/types';
 import { UserCard } from '@/entities/user/ui/userCard';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/shared/ui/Input';
-import { ErrorMessage } from '@/shared/ui/errorMessage';
-
-import { Textarea } from '@/shared/ui/textarea';
 import { TierSelect } from './tierSelect';
 import { OneLineArea } from './oneLineArea';
 import UserEditCard from './userEditCard';
-import { cn } from '@/shared/lib/utils';
 import MeFormAvatar from './meFormAvatar';
 import { MeFormData } from '../model/type';
 import { meFormSchema } from '../model/schema';
-import { useMutation } from '@tanstack/react-query';
-import { updateUser } from '@/entities/user/api/updateUser';
+import { useQuery } from '@tanstack/react-query';
 import { useUpdateUser } from '../hooks/useUpdate';
+import { getUserClient } from '@/entities/user/api/getUserClient';
 
-export default function MeForm({ user }: { user: User }): JSX.Element {
+export default function MeForm({ userId }: { userId: string }): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => getUserClient({ userId }),
+  });
+  
   const {
     register,
     setValue,
@@ -40,10 +37,10 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
   } = useForm<MeFormData>({
     resolver: zodResolver(meFormSchema),
     defaultValues: {
-      profile_image: user.profile_image,
-      game_nickname: user.game_nickname,
-      tier: user.tier ? String(user.tier) : '',
-      one_line: user.one_line ?? '',
+      profile_image: user?.profile_image,
+      game_nickname: user?.game_nickname,
+      tier: user?.tier ? String(user.tier) : '',
+      one_line: user?.one_line ?? '',
     },
     mode: 'onChange',
   });
@@ -56,6 +53,7 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
     onError: (error) => {
       console.error(error);
     },
+    userId,
   });
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,8 +76,6 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
    * 폼 제출 시 호출 (API 연결 X)
    */
   const onSubmit: SubmitHandler<MeFormData> = (data) => {
-    // TODO: API 연동 예정
-    console.log(data);
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
@@ -92,7 +88,7 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
         }
       }
     });
-    formData.append('userId', user.id);
+    formData.append('userId', userId);
     mutate(formData);
   };
 
@@ -104,6 +100,10 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
     setIsEdit(false);
     setAvatarPreview(null);
   };
+
+  if (!user || isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
