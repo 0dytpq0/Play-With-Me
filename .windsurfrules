@@ -13,7 +13,7 @@
 # Naming Conventions
 
 - Use PascalCase for classes.
-- Use PascalCase for React component file names (e.g., UserCard.tsx, not user-card.tsx).
+- Use camelCase for React component file names (e.g., UserCard.tsx, not user-card.tsx).
 - Use camelCase for variables, functions, directories, files and methods.
 - Use UPPERCASE for environment variables.
 - Avoid magic numbers and define constants.

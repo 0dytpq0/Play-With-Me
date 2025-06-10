@@ -1,11 +1,13 @@
 import { fetcher } from '@/shared/lib/utils';
-import type { User } from '@/entities/user/model/types';
+import { User } from '../model/types';
 
-export const updateUser = async ({ formData }: { formData: FormData }) => {
+export const getAllUsers = async () => {
   try {
-    const data = await fetcher<User>(`/api/user/${formData.get('userId')}`, {
-      method: 'PATCH',
-      body: formData,
+    const data = await fetcher<User[]>(`/api/user`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
     return data;
   } catch (error) {

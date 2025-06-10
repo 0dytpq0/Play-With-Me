@@ -3,10 +3,13 @@ import { fetcher } from '@/shared/lib/utils';
 import { User } from '../model/types';
 
 export const getUserClient = async ({ userId }: { userId: string }) => {
-  const data = await fetcher<User>(`/api/user/?userId=${userId}`, {
+  const data = await fetcher<User>(`/api/user/${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+    },
+    query: {
+      userId,
     },
   });
 
