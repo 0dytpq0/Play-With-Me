@@ -8,6 +8,6 @@ export type User = {
   created_at: string;
   phone: string;
   profile_image?: string;
-  tier?: number;
+  tier?: string;
   one_line?: string;
 };
