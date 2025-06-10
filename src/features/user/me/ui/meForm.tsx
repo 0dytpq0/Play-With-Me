@@ -11,6 +11,7 @@ import { useMeForm } from '../hooks';
 import MeFormSubmitButton from './meFormSubmitButton';
 import { useRouter } from 'next/navigation';
 import ModalBackground from '@/shared/ui/modalBackground';
+import { MeFormData } from '../model/type';
 
 export default function MeForm({ userId }: { userId: string }): JSX.Element {
   const {
@@ -75,7 +76,7 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
 
             {/* 티어 선택 */}
             {isEdit && (
-              <TierSelect
+              <TierSelect<MeFormData>
                 control={control}
                 name='tier'
                 disabled={!isEdit}
@@ -96,4 +97,3 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
     </ModalBackground>
   );
 }
-

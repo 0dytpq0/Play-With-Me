@@ -1,13 +1,13 @@
 import { fetcher } from '@/shared/lib/utils';
 import { User } from '../model/types';
+import { ApiResponse } from '@/shared/types/apiTypes';
 
-export const getAllUsers = async () => {
+export const getUsersByTier = async (
+  tier: string
+): Promise<ApiResponse<User[]>> => {
   try {
-    const data = await fetcher<User[]>(`/api/user`, {
+    const data = await fetcher<User[]>(`/api/user/?tier=${tier}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
     return data;
   } catch (error) {

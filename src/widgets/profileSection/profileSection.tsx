@@ -15,7 +15,6 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     queryKey: ['user', userId],
     queryFn: () => getUserClient({ userId }),
   });
-  console.log('user', user);
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
