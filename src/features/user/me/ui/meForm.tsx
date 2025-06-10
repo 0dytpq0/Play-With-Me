@@ -2,96 +2,32 @@
 
 import type { JSX } from 'react';
 import { BackButton } from '@/shared/ui/backButton';
-import { Button } from '@/shared/ui/button';
-import { Pencil2Icon } from '@radix-ui/react-icons';
-import { useState } from 'react';
 import { UserCard } from '@/entities/user/ui/userCard';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { TierSelect } from './tierSelect';
 import { OneLineArea } from './oneLineArea';
 import UserEditCard from './userEditCard';
 import MeFormAvatar from './meFormAvatar';
-import { MeFormData } from '../model/type';
-import { meFormSchema } from '../model/schema';
-import { useQuery } from '@tanstack/react-query';
-import { useUpdateUser } from '../hooks/useUpdate';
-import { getUserClient } from '@/entities/user/api/getUserClient';
+import { useMeForm } from '../hooks';
+import MeFormSubmitButton from './meFormSubmitButton';
 
 export default function MeForm({ userId }: { userId: string }): JSX.Element {
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['user', userId],
-    queryFn: () => getUserClient({ userId }),
-  });
-
   const {
-    register,
-    setValue,
+    user,
+    isLoading,
     handleSubmit,
-    formState: { errors, isDirty },
-    reset,
+    onSubmit,
+    isEdit,
+    isDirty,
+    handleCancel,
+    avatarPreview,
+    register,
     control,
-  } = useForm<MeFormData>({
-    resolver: zodResolver(meFormSchema),
-    defaultValues: {
-      profile_image: user?.profile_image,
-      game_nickname: user?.game_nickname,
-      tier: user?.tier ? String(user.tier) : '',
-      one_line: user?.one_line ?? '',
-    },
-    mode: 'onChange',
-  });
-
-  const { mutate } = useUpdateUser({
-    onSuccess: () => {
-      setIsEdit(false);
-      setAvatarPreview(null);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
+    errors,
+    handleAvatarChange,
+    setIsEdit,
+  } = useMeForm({
     userId,
   });
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setValue('profile_image', file, { shouldDirty: true });
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const result = event.target?.result;
-      if (typeof result === 'string') {
-        setAvatarPreview(result);
-      }
-    };
-    reader.readAsDataURL(file);
-
-    e.target.value = '';
-  };
-  /**
-   * 폼 제출 시 호출 (API 연결 X)
-   */
-  const onSubmit: SubmitHandler<MeFormData> = (data) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    formData.append('userId', userId);
-    mutate(formData);
-  };
-
-  /**
-   * 수정 취소
-   */
-  const handleCancel = () => {
-    reset();
-    setIsEdit(false);
-    setAvatarPreview(null);
-  };
-
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
@@ -104,36 +40,12 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
       >
         <BackButton />
 
-        {isEdit ? (
-          <div className='absolute top-2 right-2 flex gap-2'>
-            <Button
-              type='submit'
-              variant='outline'
-              size='icon'
-              disabled={!isDirty}
-            >
-              저장
-            </Button>
-            <Button
-              type='button'
-              variant='ghost'
-              size='icon'
-              onClick={handleCancel}
-            >
-              취소
-            </Button>
-          </div>
-        ) : (
-          <Button
-            type='button'
-            variant='ghost'
-            size='icon'
-            className='absolute top-2 right-2'
-            onClick={() => setIsEdit(true)}
-          >
-            <Pencil2Icon />
-          </Button>
-        )}
+        <MeFormSubmitButton
+          isEdit={isEdit}
+          isDirty={isDirty}
+          setIsEdit={setIsEdit}
+          handleCancel={handleCancel}
+        />
 
         {/* 왼쪽: 아바타 */}
         <MeFormAvatar

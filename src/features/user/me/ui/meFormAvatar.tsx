@@ -1,3 +1,5 @@
+'use client';
+
 import { Input } from '@/shared/ui/Input';
 import { cn } from '@/shared/lib/utils';
 import { User } from '@/entities/user/model/types';
@@ -18,7 +20,7 @@ export default function MeFormAvatar({
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className='flex items-center justify-center'>
+    <div className='flex items-center justify-center flex-1'>
       <Input
         type='file'
         accept='image/*'
@@ -28,7 +30,7 @@ export default function MeFormAvatar({
       />
       <div
         className={cn(
-          'relative h-full w-[250px] rounded-md bg-muted overflow-hidden cursor-default',
+          'relative h-full w-full rounded-md bg-muted overflow-hidden cursor-default',
           isEdit && 'cursor-pointer hover:scale-105 transition-transform'
         )}
         onClick={() => {
@@ -37,8 +39,6 @@ export default function MeFormAvatar({
           }
         }}
         aria-label={isEdit ? '프로필 이미지 변경' : undefined}
-        tabIndex={isEdit ? 0 : -1}
-        role='button'
       >
         <Image
           src={avatarPreview || user.profile_image || '/Icon/avatar.png'}
