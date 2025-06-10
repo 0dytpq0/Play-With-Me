@@ -1,11 +1,23 @@
 import { getUser } from '@/entities/user/api/getUser';
-import { ProfileSection } from '@/widgets/profileSection/profileSection';
+import MeForm from '@/features/user/me/ui/meForm';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+
+// 닉네임, one_line, 사진, 티어 수정가능
+// 비어있는 하단은 추후 그래프같은걸 넣어도 될듯?
 
 export default async function MeModal() {
   const user = await getUser();
+  const queryClient = new QueryClient();
+  queryClient.setQueryData(['user', user.id], user);
+  const dehydratedState = dehydrate(queryClient);
+
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
-      <ProfileSection user={user} />
-    </div>
+    <HydrationBoundary state={dehydratedState}>
+      <MeForm userId={user.id} />
+    </HydrationBoundary>
   );
 }

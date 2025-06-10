@@ -9,6 +9,8 @@ import UserEditCard from './userEditCard';
 import MeFormAvatar from './meFormAvatar';
 import { useMeForm } from '../hooks';
 import MeFormSubmitButton from './meFormSubmitButton';
+import { useRouter } from 'next/navigation';
+import ModalBackground from '@/shared/ui/modalBackground';
 
 export default function MeForm({ userId }: { userId: string }): JSX.Element {
   const {
@@ -31,11 +33,11 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
-
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
+    <ModalBackground>
       <form
         className='relative flex min-w-[750px] min-h-[500px] gap-8 rounded-xl bg-background px-6 py-10 shadow-2xl'
+        onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit(onSubmit)}
       >
         <BackButton />
@@ -91,7 +93,7 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
           />
         </div>
       </form>
-    </div>
+    </ModalBackground>
   );
 }
 
