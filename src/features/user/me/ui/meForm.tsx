@@ -12,6 +12,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/shared/ui/Input';
+import { InvisiblePlaceholder } from '@/shared/ui/InvisiblePlaceholder';
 
 /**
  * 유저 정보 수정 폼의 필드 타입
@@ -67,7 +68,7 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
       <form
-        className='relative flex min-w-[700px] min-h-[500px] gap-8 rounded-xl bg-background px-6 py-10 shadow-2xl'
+        className='relative flex min-w-[750px] min-h-[500px] gap-8 rounded-xl bg-background px-6 py-10 shadow-2xl'
         onSubmit={handleSubmit(onSubmit)}
         autoComplete='off'
       >
@@ -122,7 +123,7 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
           {/* 닉네임 */}
           <div>
             {isEdit ? (
-              <div className='flex items-center gap-2'>
+              <div className='flex gap-2'>
                 <div className='w-12 h-12 relative aspect-auto'>
                   <Image
                     src={`/tier/${user.tier}.png`}
@@ -131,19 +132,21 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
                     className='object-cover'
                   />
                 </div>
-                <Input
-                  type='text'
-                  {...register('game_nickname')}
-                  className='mt-2 max-w-40'
-                  placeholder='닉네임 변경'
-                  aria-invalid={!!errors.game_nickname}
-                  autoFocus
-                />
-                {errors.game_nickname && (
-                  <p className='mt-1 text-xs text-red-500'>
-                    {errors.game_nickname.message}
-                  </p>
-                )}
+                <div className='flex flex-col w-full'>
+                  <Input
+                    type='text'
+                    {...register('game_nickname')}
+                    className='w-40'
+                    placeholder='닉네임 변경'
+                    aria-invalid={!!errors.game_nickname}
+                    autoFocus
+                  />
+
+                  <InvisiblePlaceholder
+                    message={errors.game_nickname?.message}
+                    className='mt-1 text-xs text-red-500'
+                  />
+                </div>
               </div>
             ) : (
               <UserCard user={user} />
@@ -183,11 +186,10 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
                   placeholder='한마디 소개'
                   aria-invalid={!!errors.oneLine}
                 />
-                {errors.oneLine && (
-                  <p className='mt-1 text-xs text-red-500'>
-                    {errors.oneLine.message}
-                  </p>
-                )}
+                <InvisiblePlaceholder
+                  message={errors.oneLine?.message}
+                  className='mt-1 text-xs text-red-500'
+                />
               </>
             ) : (
               <p className='truncate text-muted-foreground p-2'>
