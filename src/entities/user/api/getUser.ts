@@ -13,13 +13,10 @@ export const getUser = async () => {
     }
 
     const { user } = userData;
-    const data = await fetcher<User>('/api/user', {
+    const data = await fetcher<User>(`/api/user/?userId=${user?.id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      },
-      query: {
-        userId: user?.id,
       },
     });
 
