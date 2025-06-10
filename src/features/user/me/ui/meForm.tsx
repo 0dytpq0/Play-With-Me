@@ -22,6 +22,9 @@ import { cn } from '@/shared/lib/utils';
 import MeFormAvatar from './meFormAvatar';
 import { MeFormData } from '../model/type';
 import { meFormSchema } from '../model/schema';
+import { useMutation } from '@tanstack/react-query';
+import { updateUser } from '@/entities/user/api/updateUser';
+import { useUpdateUser } from '../hooks/useUpdate';
 
 export default function MeForm({ user }: { user: User }): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -40,10 +43,21 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
       profile_image: user.profile_image,
       game_nickname: user.game_nickname,
       tier: user.tier ? String(user.tier) : '',
-      oneLine: user.one_line ?? '',
+      one_line: user.one_line ?? '',
     },
     mode: 'onChange',
   });
+
+  const { mutate } = useUpdateUser({
+    onSuccess: () => {
+      setIsEdit(false);
+      setAvatarPreview(null);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -53,7 +67,7 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
     reader.onload = (event) => {
       const result = event.target?.result;
       if (typeof result === 'string') {
-        setAvatarPreview(result); // <Image src={avatarPreview} ... />로 미리보기 가능
+        setAvatarPreview(result);
       }
     };
     reader.readAsDataURL(file);
@@ -63,10 +77,23 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
   /**
    * 폼 제출 시 호출 (API 연결 X)
    */
-  const onSubmit: SubmitHandler<MeFormData> = (_data) => {
+  const onSubmit: SubmitHandler<MeFormData> = (data) => {
     // TODO: API 연동 예정
-    setIsEdit(false);
-    setAvatarPreview(null);
+    console.log(data);
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        if (key === 'profile_image') {
+          if (value instanceof File) {
+            formData.append(key, value);
+          }
+        } else {
+          formData.append(key, String(value));
+        }
+      }
+    });
+    formData.append('userId', user.id);
+    mutate(formData);
   };
 
   /**
@@ -156,7 +183,7 @@ export default function MeForm({ user }: { user: User }): JSX.Element {
           <OneLineArea
             isEdit={isEdit}
             register={register}
-            errors={errors.oneLine}
+            errors={errors.one_line}
             user={user}
           />
         </div>

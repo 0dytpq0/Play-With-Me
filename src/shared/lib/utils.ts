@@ -46,14 +46,14 @@ export async function fetcher<TResponse = unknown>(
     });
     requestUrl += (url.includes('?') ? '&' : '?') + params.toString();
   }
-
+  const isFormData = body instanceof FormData;
   const fetchOptions: RequestInit = {
     method,
     headers: {
       ...headers,
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(!isFormData && body ? { 'Content-Type': 'application/json' } : {}),
     },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    ...(body ? { body: isFormData ? body : JSON.stringify(body) } : {}),
   };
 
   const response = await fetch(
@@ -63,7 +63,6 @@ export async function fetcher<TResponse = unknown>(
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    console.log('errorBody입니다', errorBody || response.statusText);
     throw new Error(errorBody.message || response.statusText);
   }
 

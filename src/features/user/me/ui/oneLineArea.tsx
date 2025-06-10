@@ -20,7 +20,7 @@ export function OneLineArea({
       {isEdit ? (
         <>
           <Textarea
-            {...register('oneLine')}
+            {...register('one_line')}
             className='text-muted-foreground p-2 max-w-[400px] h-40'
             placeholder='한마디 소개'
             aria-invalid={!!errors}

@@ -21,3 +21,32 @@ export async function GET(request: Request) {
 
   return NextResponse.json(user, { status: 200 });
 }
+
+export async function PATCH(request: Request) {
+  const formData = await request.formData();
+  const userId = formData.get('userId');
+  const game_nickname = formData.get('game_nickname');
+  const tier = formData.get('tier');
+  const one_line = formData.get('one_line');
+  console.log(userId, game_nickname, tier, one_line);
+  if (!userId) {
+    return NextResponse.json({ error: 'userId is not found' }, { status: 400 });
+  }
+
+  const supabase = await createClient();
+  const { data: user, error } = await supabase
+    .from('profiles')
+    .update({
+      game_nickname,
+      tier,
+      one_line,
+    })
+    .eq('id', userId)
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(user, { status: 200 });
+}
