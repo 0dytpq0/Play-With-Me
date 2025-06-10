@@ -26,7 +26,7 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
     queryKey: ['user', userId],
     queryFn: () => getUserClient({ userId }),
   });
-  
+
   const {
     register,
     setValue,
@@ -78,15 +78,7 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
   const onSubmit: SubmitHandler<MeFormData> = (data) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        if (key === 'profile_image') {
-          if (value instanceof File) {
-            formData.append(key, value);
-          }
-        } else {
-          formData.append(key, String(value));
-        }
-      }
+      formData.append(key, value);
     });
     formData.append('userId', userId);
     mutate(formData);

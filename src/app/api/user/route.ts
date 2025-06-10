@@ -29,6 +29,7 @@ export async function PATCH(request: Request) {
   const tier = formData.get('tier');
   const one_line = formData.get('one_line');
   const profile_image = formData.get('profile_image');
+  console.log('profile_image', profile_image);
   const supabase = await createClient();
   let profile_image_url: string = '';
 
@@ -36,13 +37,13 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: 'userId is not found' }, { status: 400 });
   }
 
-  if (profile_image) {
-    const ext = (profile_image as File).name.split('.').pop() || 'png';
+  if (profile_image && profile_image instanceof File) {
+    const ext = profile_image.name.split('.').pop() || 'png';
     const fileName = `${userId}.${ext}`;
     const { error: uploadError } = await supabase.storage
       .from('profile')
-      .upload(fileName, await (profile_image as File).arrayBuffer(), {
-        contentType: (profile_image as File).type,
+      .upload(fileName, await profile_image.arrayBuffer(), {
+        contentType: profile_image.type,
         upsert: true,
       });
     if (uploadError) {
@@ -58,7 +59,7 @@ export async function PATCH(request: Request) {
       game_nickname,
       tier,
       one_line,
-      profile_image: profile_image_url,
+      profile_image: profile_image_url || profile_image,
     })
     .eq('id', userId)
     .single();
