@@ -20,20 +20,8 @@ import { OneLineArea } from './oneLineArea';
 import UserEditCard from './userEditCard';
 import { cn } from '@/shared/lib/utils';
 import MeFormAvatar from './meFormAvatar';
-
-/**
- * 유저 정보 수정 폼의 필드 타입
- */
-const meFormSchema = z.object({
-  game_nickname: z.string().refine((val) => /^[^#]+#[^#]+$/.test(val), {
-    message: '발로란트 닉네임은 "이름#태그" 형식이어야 합니다. 예: player#KR1',
-  }),
-  profile_image: z.union([z.string(), z.instanceof(File)]).optional(),
-  tier: z.string().min(1, '티어를 선택해주세요.'),
-  oneLine: z.string().max(50, '한마디 소개는 50자 이하로 입력해주세요.'),
-});
-
-export type MeFormData = z.infer<typeof meFormSchema>;
+import { MeFormData } from '../model/type';
+import { meFormSchema } from '../model/schema';
 
 export default function MeForm({ user }: { user: User }): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
