@@ -8,17 +8,12 @@ import type { LoginFormType } from '@/entities/auth/model/types';
 import { useLogin } from '../hooks/useLogin';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import {
-  ArrowRightIcon,
-  Cross2Icon,
-  LockClosedIcon,
-} from '@radix-ui/react-icons';
-import { useRouter } from 'next/navigation';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { BackButton } from '@/shared/ui/backButton';
-import { toLoginFormData } from '@/entities/lib/formData';
+import { toLoginFormData } from '@/entities/auth/lib/formData';
+import ModalBackground from '@/shared/ui/modalBackground';
 
 export function LoginForm() {
-  const router = useRouter();
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
@@ -33,8 +28,11 @@ export function LoginForm() {
   };
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
-      <div className='relative flex flex-col items-center gap-4 justify-center bg-background rounded-xl shadow-2xl p-8 min-w-[340px]'>
+    <ModalBackground>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className='relative flex flex-col items-center gap-4 justify-center bg-background rounded-xl shadow-2xl p-8 min-w-[340px]'
+      >
         <BackButton />
 
         <Button asChild variant={'link'} className='absolute top-2 right-2'>
@@ -46,7 +44,6 @@ export function LoginForm() {
         <h1 className='text-2xl font-bold mt-2 mb-2'>로그인</h1>
         <AuthForm formType='login' form={form} onSubmit={onSubmit} />
       </div>
-    </div>
+    </ModalBackground>
   );
 }
-

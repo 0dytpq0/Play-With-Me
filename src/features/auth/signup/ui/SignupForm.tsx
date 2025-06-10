@@ -11,7 +11,8 @@ import GenderPopover from '@/entities/auth/ui/GenderPopover';
 import CalendarPopover from '@/entities/auth/ui/CalendarPopover';
 import { SignUpFormType } from '@/entities/auth/model/types';
 import { BackButton } from '@/shared/ui/backButton';
-import { toSignupFormData } from '@/entities/lib/formData';
+import { toSignupFormData } from '@/entities/auth/lib/formData';
+import ModalBackground from '@/shared/ui/modalBackground';
 
 export function SignupForm() {
   const { mutate } = useSignup();
@@ -37,8 +38,11 @@ export function SignupForm() {
   };
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
-      <div className='relative flex flex-col items-center gap-4 justify-center bg-background rounded-xl shadow-2xl p-8 min-w-[340px]'>
+    <ModalBackground>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className='relative flex flex-col items-center gap-4 justify-center bg-background rounded-xl shadow-2xl p-8 min-w-[340px]'
+      >
         <BackButton />
 
         <h1 className='text-2xl font-bold mt-4'>회원가입</h1>
@@ -80,6 +84,6 @@ export function SignupForm() {
           </div>
         </AuthForm>
       </div>
-    </div>
+    </ModalBackground>
   );
 }
