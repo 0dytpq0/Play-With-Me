@@ -81,7 +81,7 @@ export const useMeForm = ({ userId }: { userId: string }) => {
       formData.append(key, value);
     });
     formData.append('userId', userId);
-    updateUserMutate(formData);
+    updateUserMutate({ formData });
   };
 
   // 수정 취소 핸들러

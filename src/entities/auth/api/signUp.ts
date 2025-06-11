@@ -13,12 +13,6 @@ export const signup = async (
     return result;
   } catch (error) {
     console.error('회원가입 에러 :', error);
-    return {
-      status: 'error',
-      message:
-        error instanceof Error
-          ? error.message
-          : '알 수 없는 오류가 발생했습니다.',
-    };
+    throw new Error(error instanceof Error ? error.message : '회원가입 에러');
   }
 };

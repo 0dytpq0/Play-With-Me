@@ -15,9 +15,6 @@ export const login = async (
     return result;
   } catch (error) {
     console.error(error);
-    return {
-      status: 'error',
-      message: `${error}`,
-    };
+    throw new Error(error instanceof Error ? error.message : '로그인 에러');
   }
 };

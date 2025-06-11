@@ -3,7 +3,6 @@
 import { UserCard } from '@/entities/user/ui/userCard';
 import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
-import { User } from '@/entities/user/model/types';
 import { useQuery } from '@tanstack/react-query';
 import { getUserClient } from '@/entities/user/api/getUserClient';
 
@@ -16,7 +15,6 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     queryKey: ['user', userId],
     queryFn: () => getUserClient({ userId }),
   });
-
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }

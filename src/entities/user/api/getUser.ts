@@ -13,7 +13,7 @@ export const getUser = async () => {
     }
 
     const { user } = userData;
-    const data = await fetcher<User>('/api/user', {
+    const data = await fetcher<User>(`/api/user/${user?.id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -25,6 +25,7 @@ export const getUser = async () => {
 
     return data;
   } catch (error) {
+    // 후에 throw new Error로 수정하고 redirect는 클라이언트에서 해줘야 할듯
     console.error('Error fetching user:', error);
     redirect('/');
   }

@@ -1,4 +1,10 @@
-import { Controller, Control, FieldError } from 'react-hook-form';
+import {
+  Controller,
+  Control,
+  FieldError,
+  FieldValues,
+  Path,
+} from 'react-hook-form';
 import {
   Select,
   SelectContent,
@@ -10,7 +16,6 @@ import {
 } from '@/shared/ui/select';
 import { ErrorMessage } from '@/shared/ui/errorMessage';
 import { cn } from '@/shared/lib/utils';
-import { MeFormData } from '../model/type';
 
 const TIER_OPTIONS = [
   { value: 'bronze', label: '브론즈' },
@@ -23,26 +28,27 @@ const TIER_OPTIONS = [
   { value: 'radiant', label: '레디언트' },
 ];
 
-export type TierSelectProps = {
-  control: Control<MeFormData>;
-  name: 'tier';
+export type TierSelectProps<T extends FieldValues> = {
+  control: Control<T>;
+  name: Path<T>;
   disabled?: boolean;
   error?: FieldError;
   placeholder?: string;
+  isMessage?: boolean;
+  triggerClassName?: string;
   className?: string;
 };
 
-/**
- * Controller 기반 TierSelect (react-hook-form 커스텀 컴포넌트 연동)
- */
-export function TierSelect({
+export function TierSelect<T extends FieldValues>({
   control,
   name,
   disabled,
   error,
   placeholder = '티어 선택',
+  isMessage = true,
+  triggerClassName,
   className,
-}: TierSelectProps) {
+}: TierSelectProps<T>) {
   return (
     <div className={cn('flex flex-col gap-1', className)}>
       <Controller
@@ -54,7 +60,7 @@ export function TierSelect({
             value={field.value}
             onValueChange={field.onChange}
           >
-            <SelectTrigger className='w-[180px] text-muted-foreground'>
+            <SelectTrigger className={cn('w-[180px]', triggerClassName)}>
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
@@ -70,12 +76,13 @@ export function TierSelect({
           </Select>
         )}
       />
-      <ErrorMessage
-        message={error?.message || '티어를 선택해주세요.'}
-        isError={!!error}
-        className='mt-3 text-xs text-muted-foreground'
-      />
+      {isMessage && (
+        <ErrorMessage
+          message={error?.message || '티어를 선택해주세요.'}
+          isError={!!error}
+          className='mt-3 text-xs text-muted-foreground'
+        />
+      )}
     </div>
   );
 }
-
