@@ -17,7 +17,7 @@ export default async function HomePage() {
     <HydrationBoundary state={dehydratedState}>
       <main className='w-full mx-auto h-dvh flex flex-col justify-center p-8 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 text-white'>
         <div className='h-full w-full max-w-7xl mx-auto flex justify-center gap-8'>
-          <div className='min-w-[70%] h-full max-h-dvh  flex flex-col gap-4 items-center'>
+          <div className='w-[70%] max-w-[70%] h-full max-h-dvh  flex flex-col gap-4 items-center'>
             <GlazeBox className='w-full h-[20%] min-h-[150px]'>
               <h2 className='text-2xl font-bold mb-4'>
                 최근 함께 플레이한 유저
