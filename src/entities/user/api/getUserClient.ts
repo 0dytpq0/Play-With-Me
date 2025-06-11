@@ -4,6 +4,9 @@ import { User } from '../model/types';
 
 export const getUserClient = async ({ userId }: { userId: string }) => {
   try {
+    if (!userId || userId.length <= 0) {
+      throw new Error('유저 ID가 없습니다.');
+    }
     const data = await fetcher<User>(`/api/user/${userId}`, {
       method: 'GET',
       headers: {

@@ -5,25 +5,25 @@ import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { getUserClient } from '@/entities/user/api/getUserClient';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface MateSectionProps {
   userId: string;
 }
-{
-  /* <div>
-                <h1>player#kr1</h1>
-                <div>티어 이미지</div>
-              </div>
-              <div>자기 소개 한마디</div>
-              <div>채팅 걸기</div>
-              <div>듀오 신청</div> */
-}
+
 export function MateSection({ userId }: MateSectionProps) {
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['mate', userId],
-    queryFn: () => getUserClient({ userId }),
+  const searchParams = useSearchParams();
+  const mateId = searchParams.get('mate');
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['mate', mateId],
+    queryFn: () => getUserClient({ userId: mateId || '' }),
   });
-  if (!user || isLoading) {
+
+  if (!user || isLoading || isError) {
     return <div>Loading...</div>;
   }
 
