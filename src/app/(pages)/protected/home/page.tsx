@@ -7,6 +7,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { UserListSection } from '@/widgets/userListSection/ui/userListSection';
+import { MateSection } from '@/widgets/mateSection/mateSection';
 
 export default async function HomePage() {
   const user = await getUser();
@@ -62,13 +63,14 @@ export default async function HomePage() {
               <ProfileSection userId={user?.id} />
             </GlazeBox>
             <GlazeBox className='w-full flex-1'>
-              <div>
+              <MateSection userId={user?.id} />
+              {/* <div>
                 <h1>player#kr1</h1>
                 <div>티어 이미지</div>
               </div>
               <div>자기 소개 한마디</div>
               <div>채팅 걸기</div>
-              <div>듀오 신청</div>
+              <div>듀오 신청</div> */}
             </GlazeBox>
           </div>
         </div>
