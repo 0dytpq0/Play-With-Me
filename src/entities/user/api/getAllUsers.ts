@@ -3,7 +3,7 @@ import { User } from '../model/types';
 
 export const getUsersByTier = async (tier: string): Promise<User[]> => {
   try {
-    const data = await fetcher<User[]>(`/api/ㅁㄴㅇ/?tier=${tier}`, {
+    const data = await fetcher<User[]>(`/api/user/?tier=${tier}`, {
       method: 'GET',
     });
     return data;

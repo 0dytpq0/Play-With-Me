@@ -1,7 +1,8 @@
 import { User } from '@/entities/user/model/types';
 import Image from 'next/image';
+import { memo } from 'react';
 
-export default function UserListItem({ user }: { user: User }) {
+const UserListItem = ({ user }: { user: User }) => {
   const [nickname, tag] = user.game_nickname.split('#');
   return (
     <div key={user.id} className='flex gap-2 items-center w-full max-h-24'>
@@ -22,4 +23,6 @@ export default function UserListItem({ user }: { user: User }) {
       </div>
     </div>
   );
-}
+};
+
+export default memo(UserListItem);
