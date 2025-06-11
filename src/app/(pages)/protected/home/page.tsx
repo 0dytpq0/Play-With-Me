@@ -6,7 +6,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { UserListSection } from '@/widgets/userListSection/userListSection';
+import { UserListSection } from '@/widgets/userListSection/ui/userListSection';
 
 export default async function HomePage() {
   const user = await getUser();
