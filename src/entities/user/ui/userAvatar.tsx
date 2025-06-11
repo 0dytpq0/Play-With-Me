@@ -36,7 +36,7 @@ export function UserAvatar({
           className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10`}
         >
           <span className='text-white font-bold select-none'>
-            마이페이지로 이동
+            유저 페이지로 이동
           </span>
         </div>
       </div>

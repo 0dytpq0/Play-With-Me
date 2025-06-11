@@ -11,10 +11,7 @@ export function UserCard({ user, className, ...props }: UserCardProps) {
   const [nickname, tag] = user.game_nickname.split('#');
   return (
     <>
-      <div
-        className={cn('w-full flex items-center gap-2', className)}
-        {...props}
-      >
+      <div className={cn('flex items-center gap-2', className)} {...props}>
         <div className='relative aspect-auto w-12 h-12'>
           <Image
             src={`/tier/${user.tier}.png`}
