@@ -10,12 +10,8 @@ export const updateUser = async ({ formData }: { formData: FormData }) => {
     return data;
   } catch (error) {
     console.error('유저 정보 업데이트 에러 :', error);
-    return {
-      status: 'error',
-      message:
-        error instanceof Error
-          ? error.message
-          : '알 수 없는 오류가 발생했습니다.',
-    };
+    throw new Error(
+      error instanceof Error ? error.message : '유저 정보 업데이트 에러'
+    );
   }
 };

@@ -5,7 +5,6 @@ import GlazeBox from '@/shared/ui/glazeBox';
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@/entities/user/model/types';
-import { ApiResponse } from '@/shared/types/apiTypes';
 import { UserListSectionFormData } from '../model/types';
 import UserListSectionHeader from './userListSectionHeader';
 import UserList from './userList';
@@ -19,12 +18,15 @@ export function UserListSection({ userId }: UserListSectionProps) {
     defaultValues: { tier: '' },
   });
 
-  const { data: users, isLoading } = useQuery<ApiResponse<User[]>>({
+  const {
+    data: users,
+    isLoading,
+    isError,
+  } = useQuery<User[]>({
     queryKey: ['tierUsers', watch('tier')],
     queryFn: () => getUsersByTier(watch('tier')),
     refetchInterval: 10000 * 60 * 5,
   });
-
   const fakeUsers = [
     {
       id: '1',
@@ -153,11 +155,7 @@ export function UserListSection({ userId }: UserListSectionProps) {
       one_line: '자기 소개 한마디',
     },
   ];
-
-  if (!users || isLoading) {
-    return <div>Loading...</div>;
-  }
-  if ('status' in users) {
+  if (isError) {
     return (
       <GlazeBox className='w-full flex-1 flex flex-col min-h-0'>
         <div className='w-full h-full flex items-center justify-center'>
@@ -168,10 +166,15 @@ export function UserListSection({ userId }: UserListSectionProps) {
       </GlazeBox>
     );
   }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <GlazeBox className='w-full flex-1 flex flex-col min-h-0'>
       <UserListSectionHeader control={control} />
-      <UserList users={users} />
+      <UserList users={users!} />
     </GlazeBox>
   );
 }
