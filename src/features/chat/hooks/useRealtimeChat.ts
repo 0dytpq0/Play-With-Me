@@ -27,7 +27,7 @@ export function useRealtimeChat(userId: string, mateId: string) {
     },
   });
   const {
-    data: chatMessages,
+    data: chattings,
     isLoading,
     isError,
   } = useQuery<SendChatResponse[]>({
@@ -58,6 +58,6 @@ export function useRealtimeChat(userId: string, mateId: string) {
     };
   }, [roomId, queryClient]);
 
-  return { chatMessages, isLoading, isError, mutate };
+  return { chattings, isLoading, isError, mutate };
 }
 
