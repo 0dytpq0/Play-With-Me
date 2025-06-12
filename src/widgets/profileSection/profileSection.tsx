@@ -5,6 +5,7 @@ import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { getUserClient } from '@/entities/user/api/getUserClient';
+import { useLogout } from '@/features/auth/login/hooks';
 
 interface ProfileSectionProps {
   userId: string;
@@ -19,6 +20,8 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     return <div>Loading...</div>;
   }
 
+  const { mutate: logout } = useLogout();
+
   return (
     <div className='h-full flex flex-col gap-2'>
       <UserCard user={user} />
@@ -28,7 +31,10 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
           <Button className='w-full bg-purple-600 hover:bg-purple-700'>
             전체 채팅 목록
           </Button>
-          <Button className='w-full bg-purple-600 hover:bg-purple-700'>
+          <Button
+            className='w-full bg-purple-600 hover:bg-purple-700'
+            onClick={() => logout()}
+          >
             로그아웃
           </Button>
         </div>

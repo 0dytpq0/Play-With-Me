@@ -7,6 +7,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { UserListSection } from '@/widgets/userListSection/ui/userListSection';
+import { MateSection } from '@/widgets/mateSection/mateSection';
 
 export default async function HomePage() {
   const user = await getUser();
@@ -16,7 +17,7 @@ export default async function HomePage() {
   return (
     <HydrationBoundary state={dehydratedState}>
       <main className='w-full mx-auto h-dvh flex flex-col justify-center p-8 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 text-white'>
-        <div className='h-full w-full max-w-7xl mx-auto flex justify-center gap-8'>
+        <div className='h-full w-full mx-auto flex justify-center gap-8'>
           <div className='w-[70%] max-w-[70%] h-full max-h-dvh  flex flex-col gap-4 items-center'>
             <GlazeBox className='w-full h-[20%] min-h-[150px]'>
               <h2 className='text-2xl font-bold mb-4'>
@@ -58,17 +59,11 @@ export default async function HomePage() {
             </GlazeBox>
           </div>
           <div className='flex-1 flex flex-col gap-4 items-center'>
-            <GlazeBox className='w-full min-h-[300px]'>
+            <GlazeBox className='w-full flex-1 '>
               <ProfileSection userId={user?.id} />
             </GlazeBox>
-            <GlazeBox className='w-full flex-1'>
-              <div>
-                <h1>player#kr1</h1>
-                <div>티어 이미지</div>
-              </div>
-              <div>자기 소개 한마디</div>
-              <div>채팅 걸기</div>
-              <div>듀오 신청</div>
+            <GlazeBox className='w-full flex-1 flex flex-col gap-2'>
+              <MateSection userId={user?.id} />
             </GlazeBox>
           </div>
         </div>

@@ -5,13 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { loginSchema } from '@/entities/auth/model/schema';
 import type { LoginFormType } from '@/entities/auth/model/types';
-import { useLogin } from '../hooks/useLogin';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { BackButton } from '@/shared/ui/backButton';
 import { toLoginFormData } from '@/entities/auth/lib/formData';
 import ModalBackground from '@/shared/ui/modalBackground';
+import { useLogin } from '../hooks';
 
 export function LoginForm() {
   const form = useForm<LoginFormType>({
