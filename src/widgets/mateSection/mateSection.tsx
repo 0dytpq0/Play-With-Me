@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { getUserClient } from '@/entities/user/api/getUserClient';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface MateSectionProps {
   userId: string;
@@ -14,6 +15,7 @@ interface MateSectionProps {
 export function MateSection({ userId }: MateSectionProps) {
   const searchParams = useSearchParams();
   const mateId = searchParams.get('mate');
+
   const {
     data: user,
     isLoading,
@@ -38,8 +40,8 @@ export function MateSection({ userId }: MateSectionProps) {
         </div>
       </div>
       <div className='flex items-end gap-6'>
-        <Button className='w-full bg-purple-600 hover:bg-purple-700'>
-          채팅 시작
+        <Button asChild className='w-full bg-purple-600 hover:bg-purple-700'>
+          <Link href={`/protected/chat?mate=${mateId}`}>채팅 시작</Link>
         </Button>
         <Button className='w-full bg-purple-600 hover:bg-purple-700'>
           듀오 신청
