@@ -11,15 +11,22 @@ import { cn } from '@/shared/lib/utils';
  * @param props div props
  */
 
+type UserAvatarProps = {
+  user: Pick<User, 'profile_image' | 'id'>;
+  mateId?: string | null;
+} & ComponentProps<'div'>;
 export function UserAvatar({
   user,
+  mateId,
   className,
   ...props
-}: {
-  user: Pick<User, 'profile_image' | 'id'>;
-} & ComponentProps<'div'>) {
+}: UserAvatarProps) {
   return (
-    <Link href='/protected/me' className={cn('group', className)} tabIndex={-1}>
+    <Link
+      href={`/protected/me?mate=${mateId}`}
+      className={cn('group', className)}
+      tabIndex={-1}
+    >
       <div
         className={cn(
           'relative aspect-auto cursor-pointer overflow-hidden w-full h-full rounded-lg'
