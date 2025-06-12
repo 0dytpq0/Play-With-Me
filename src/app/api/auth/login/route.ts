@@ -1,7 +1,7 @@
 import { createClient } from '@/shared/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const email = formData.get('email')?.toString();

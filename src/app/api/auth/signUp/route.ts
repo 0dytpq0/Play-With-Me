@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/lib/supabase/server';
 import { headers } from 'next/headers';
 
@@ -7,7 +7,7 @@ import { headers } from 'next/headers';
  * @param request - 회원가입 요청
  * @returns 회원가입 결과
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const email = formData.get('email')?.toString();

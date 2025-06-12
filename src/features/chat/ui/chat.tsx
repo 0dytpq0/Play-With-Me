@@ -3,12 +3,14 @@
 import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 /**
  * Simple Chat UI (local state only)
  * @returns {JSX.Element}
  */
 import { useState, FormEvent } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { sendChat } from '../api/sendChat';
 
 /**
  * 메시지 타입
@@ -36,24 +38,32 @@ export default function Chat({ userId, mateId }: ChatProps) {
         '안녕하세요! 무엇을 도와드릴까요?안녕하세요! 무엇을 도와드릴까요?',
     },
   ]);
-  const [input, setInput] = useState('');
+  const [chat, setChat] = useState<string>('');
 
-  const form = useForm<ChatForm>({
-    defaultValues: { message: '' },
+  const { mutate } = useMutation({
+    mutationFn: sendChat,
+    onSuccess: () => {
+      setChat('');
+    },
   });
+
+  const genRoomId = (userId: string, mateId: string) => {
+    const roomId = [userId, mateId].sort().join('-');
+    return roomId;
+  };
 
   /**
    * 메시지 전송 핸들러
    */
-  const onSubmit: SubmitHandler<ChatForm> = (data) => {
-    if (!data.message.trim()) return;
-    setMessages((prev) => [
-      ...prev,
-      { id: prev.length + 1, sender: 'me', content: data.message },
-    ]);
-    form.reset();
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('onSubmit', chat);
+    mutate({
+      roomId: genRoomId(userId, mateId),
+      senderId: userId,
+      content: chat,
+    });
   };
-  console.log('form.watch', form.watch('message'));
   return (
     <div
       onClick={(e) => e.stopPropagation()}
@@ -79,27 +89,12 @@ export default function Chat({ userId, mateId }: ChatProps) {
           </div>
         ))}
       </div>
-      {/* 입력창 */}
-      {/* react-hook-form 사용 */}
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='flex gap-2 mt-2 items-end'
-      >
-        <Controller
-          name='message'
-          control={form.control}
-          defaultValue=''
-          render={({ field }) => (
-            <Textarea
-              className='scrollbar-hide flex-1 w-0 p-3 rounded-lg text-black bg-white focus:outline-purple-500 resize-none'
-              autoFocus
-              onInput={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                field.onChange(e.target.value)
-              }
-              onBlur={field.onBlur}
-              ref={field.ref}
-            />
-          )}
+      <form onSubmit={onSubmit} className='flex gap-2 mt-2 items-end'>
+        <Textarea
+          className='scrollbar-hide flex-1 w-0 p-3 rounded-lg text-black bg-white focus:outline-purple-500 resize-none'
+          autoFocus
+          value={chat}
+          onChange={(e) => setChat(e.target.value)}
         />
         <Button type='submit' className='bg-purple-600 hover:bg-purple-700 '>
           전송
