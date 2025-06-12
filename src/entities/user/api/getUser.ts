@@ -15,9 +15,6 @@ export const getUser = async () => {
     const { user } = userData;
     const data = await fetcher<User>(`/api/user/${user?.id}`, {
       method: 'GET',
-      query: {
-        userId: user?.id,
-      },
     });
 
     return data;

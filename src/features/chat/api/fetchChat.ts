@@ -4,9 +4,7 @@ import { SendChatResponse } from '../model/types';
 
 export const fetchChat = async (roomId: string) => {
   try {
-    const data = await fetcher<SendChatResponse[]>(
-      `/api/chat?roomId=${roomId}`
-    );
+    const data = await fetcher<SendChatResponse[]>(`/api/chat/${roomId}`);
     return data;
   } catch (error) {
     console.error(error);
