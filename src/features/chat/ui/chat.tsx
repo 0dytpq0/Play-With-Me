@@ -2,11 +2,11 @@
 
 import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useState, MouseEvent } from 'react';
-import { fetchChat, sendChat } from '../api';
-import { SendChatResponse } from '../model/types';
+import { useState, MouseEvent, KeyboardEvent, useRef, useEffect } from 'react';
+import { sendChat } from '../api';
+import { useRealtimeChat } from '../hooks/useRealtimeChat';
 
 interface ChatProps {
   userId: string;
@@ -19,11 +19,16 @@ export default function Chat({ userId, mateId }: ChatProps) {
     const roomId = [userId, mateId].sort().join('-');
     return roomId;
   };
+  const { data: chatMessages } = useRealtimeChat(userId, mateId);
   const queryClient = useQueryClient();
-  const { data: chatMessages } = useQuery<SendChatResponse[]>({
-    queryKey: ['chat', genRoomId(userId, mateId)],
-    queryFn: () => fetchChat(genRoomId(userId, mateId)),
-  });
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
   const { mutate } = useMutation({
     mutationFn: sendChat,
     onSuccess: () => {
@@ -37,9 +42,10 @@ export default function Chat({ userId, mateId }: ChatProps) {
   /**
    * 메시지 전송 핸들러
    */
-  const handleSend = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSend = (
+    e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     e.preventDefault();
-    console.log('123123', 123123);
     mutate({
       roomId: genRoomId(userId, mateId),
       senderId: userId,
@@ -52,7 +58,10 @@ export default function Chat({ userId, mateId }: ChatProps) {
       className='relative flex flex-col w-[700px] h-[calc(100vh-100px)] my-10 gap-4 rounded-xl bg-background px-6 py-10 shadow-2xl'
     >
       <h1>메이트 아이디 태그</h1>
-      <div className='flex-1 overflow-y-auto space-y-2 pr-2'>
+      <div
+        className='flex-1 overflow-y-auto space-y-2 pr-2'
+        ref={chatContainerRef}
+      >
         {chatMessages?.map((msg) => (
           <div
             key={msg.id}
@@ -76,6 +85,12 @@ export default function Chat({ userId, mateId }: ChatProps) {
           className='scrollbar-hide flex-1 w-0 p-3 rounded-lg text-black bg-white focus:outline-purple-500 resize-none'
           autoFocus
           value={chatMessage}
+          onKeyDown={(e: KeyboardEvent<HTMLTextAreaElement>) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleSend(e);
+            }
+          }}
           onChange={(e) => setChatMessage(e.target.value)}
         />
         <Button
