@@ -2,11 +2,13 @@
 
 import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useState, MouseEvent, KeyboardEvent, useRef, useEffect } from 'react';
 import { sendChat } from '../api';
 import { useRealtimeChat } from '../hooks/useRealtimeChat';
+import { getUserClient } from '@/entities/user/api/getUserClient';
+import { cn } from '@/shared/lib/utils';
 
 interface ChatProps {
   userId: string;
@@ -15,6 +17,16 @@ interface ChatProps {
 
 export default function Chat({ userId, mateId }: ChatProps) {
   const [chatMessage, setChatMessage] = useState<string>('');
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user', mateId],
+    queryFn: () => getUserClient({ userId: mateId }),
+    select: (data) => ({
+      ...data,
+      game_nickname: data.game_nickname?.split('#'),
+    }),
+  });
+  const [game_nickname, game_tag] = user?.game_nickname || [];
+  console.log('user', user);
   const genRoomId = (userId: string, mateId: string) => {
     const roomId = [userId, mateId].sort().join('-');
     return roomId;
@@ -39,9 +51,19 @@ export default function Chat({ userId, mateId }: ChatProps) {
     },
   });
 
-  /**
-   * 메시지 전송 핸들러
-   */
+  const GRADIENTS = [
+    'bg-gradient-to-r from-purple-400 via-pink-500 to-orange-500',
+    'bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400',
+    'bg-gradient-to-r from-red-400 via-yellow-400 to-green-400',
+    'bg-gradient-to-r from-fuchsia-400 via-pink-400 to-rose-400',
+    'bg-gradient-to-r from-indigo-400 via-sky-400 to-emerald-400',
+    'bg-gradient-to-r from-orange-400 via-yellow-400 to-green-400',
+    'bg-gradient-to-r from-purple-400 via-indigo-400 to-pink-500',
+    'bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400',
+    'bg-gradient-to-r from-green-400 via-teal-400 to-cyan-400',
+    'bg-gradient-to-r from-blue-400 via-sky-400 to-emerald-400',
+  ];
+
   const handleSend = (
     e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLTextAreaElement>
   ) => {
@@ -57,7 +79,19 @@ export default function Chat({ userId, mateId }: ChatProps) {
       onClick={(e) => e.stopPropagation()}
       className='relative flex flex-col w-[700px] h-[calc(100vh-100px)] my-10 gap-4 rounded-xl bg-background px-6 py-10 shadow-2xl'
     >
-      <h1>메이트 아이디 태그</h1>
+      <div className='flex gap-x-2 p-2 items-end'>
+        <span
+          className={cn(
+            'text-3xl font-bold bg-clip-text text-transparent',
+            GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)]
+          )}
+        >
+          {game_nickname}
+        </span>
+        <span className='text-xl font-bold text-muted-foreground'>
+          #{game_tag}
+        </span>
+      </div>
       <div
         className='flex-1 overflow-y-auto space-y-2 pr-2'
         ref={chatContainerRef}
