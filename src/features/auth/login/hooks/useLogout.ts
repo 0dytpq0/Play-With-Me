@@ -1,13 +1,16 @@
+import { logout } from '@/entities/auth/api/logout';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signup } from '@/entities/auth/api/signup';
+import { useRouter } from 'next/navigation';
 
-export function useSignup() {
+export function useLogout() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
-    mutationFn: signup,
+    mutationFn: logout,
     onSuccess: () => {
       queryClient.resetQueries();
+      router.push('/');
     },
     onError: (error) => {
       console.error(error);
