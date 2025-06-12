@@ -70,6 +70,11 @@
     @apply p-4 bg-white/10 border border-white/10 backdrop-blur-md shadow-2xl rounded-2xl;
   }
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .scrollbar::-webkit-scrollbar {
   width: 13px;
 }

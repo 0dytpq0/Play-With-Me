@@ -4,7 +4,8 @@ import ModalBackground from '@/shared/ui/modalBackground';
 export default function ChatModal() {
   return (
     <ModalBackground>
-      <Chat />
+      <div>쳇</div>
+      {/* <Chat /> */}
     </ModalBackground>
   );
 }

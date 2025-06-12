@@ -5,7 +5,7 @@ import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { getUserClient } from '@/entities/user/api/getUserClient';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 interface MateSectionProps {

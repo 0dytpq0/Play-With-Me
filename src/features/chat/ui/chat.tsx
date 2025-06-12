@@ -1,5 +1,110 @@
-export default function Chat() {
+'use client';
+
+import { Button } from '@/shared/ui/button';
+import { Textarea } from '@/shared/ui/textarea';
+import { zodResolver } from '@hookform/resolvers/zod';
+/**
+ * Simple Chat UI (local state only)
+ * @returns {JSX.Element}
+ */
+import { useState, FormEvent } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+
+/**
+ * 메시지 타입
+ */
+type Message = {
+  id: number;
+  sender: 'me' | 'other';
+  content: string;
+};
+
+interface ChatProps {
+  userId: string;
+  mateId: string;
+}
+type ChatForm = {
+  message: string;
+};
+export default function Chat({ userId, mateId }: ChatProps) {
+  const [messages, setMessages] = useState<Message[]>([
+    { id: 1, sender: 'other', content: '안녕하세요!' },
+    {
+      id: 2,
+      sender: 'me',
+      content:
+        '안녕하세요! 무엇을 도와드릴까요?안녕하세요! 무엇을 도와드릴까요?',
+    },
+  ]);
+  const [input, setInput] = useState('');
+
+  const form = useForm<ChatForm>({
+    defaultValues: { message: '' },
+  });
+
+  /**
+   * 메시지 전송 핸들러
+   */
+  const onSubmit: SubmitHandler<ChatForm> = (data) => {
+    if (!data.message.trim()) return;
+    setMessages((prev) => [
+      ...prev,
+      { id: prev.length + 1, sender: 'me', content: data.message },
+    ]);
+    form.reset();
+  };
+  console.log('form.watch', form.watch('message'));
   return (
-    <div className='relative flex min-w-[750px] min-h-[500px] gap-8 rounded-xl bg-background px-6 py-10 shadow-2xl'></div>
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className='relative flex flex-col w-[700px] h-[calc(100vh-100px)] my-10 gap-4 rounded-xl bg-background px-6 py-10 shadow-2xl'
+    >
+      <h1>메이트 아이디 태그</h1>
+      <div className='flex-1 overflow-y-auto space-y-2 pr-2'>
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div
+              className={`px-4 py-2 rounded-2xl max-w-[60%] break-words text-sm '
+                ${
+                  msg.sender === 'me'
+                    ? 'bg-purple-600 text-white rounded-br-none'
+                    : 'bg-slate-200 text-black rounded-bl-none'
+                }`}
+            >
+              {msg.content}
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* 입력창 */}
+      {/* react-hook-form 사용 */}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='flex gap-2 mt-2 items-end'
+      >
+        <Controller
+          name='message'
+          control={form.control}
+          defaultValue=''
+          render={({ field }) => (
+            <Textarea
+              className='scrollbar-hide flex-1 w-0 p-3 rounded-lg text-black bg-white focus:outline-purple-500 resize-none'
+              autoFocus
+              onInput={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                field.onChange(e.target.value)
+              }
+              onBlur={field.onBlur}
+              ref={field.ref}
+            />
+          )}
+        />
+        <Button type='submit' className='bg-purple-600 hover:bg-purple-700 '>
+          전송
+        </Button>
+      </form>
+    </div>
   );
 }

@@ -11,12 +11,12 @@ export default async function ChatModal({
 }: {
   searchParams: Props;
 }) {
-  const { mate } = searchParams;
+  const { mate: mateId } = searchParams;
   const user = await getUser();
 
   return (
     <ModalBackground>
-      <Chat />
+      <Chat userId={user.id} mateId={mateId} />
     </ModalBackground>
   );
 }
