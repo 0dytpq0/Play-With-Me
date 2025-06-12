@@ -23,3 +23,26 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(data, { status: 200 });
 }
+
+export async function GET(request: NextRequest) {
+  const supabase = await createClient();
+  const { searchParams } = new URL(request.url);
+  const roomId = searchParams.get('roomId');
+
+  if (!roomId) {
+    return NextResponse.json(
+      { error: '채팅방 ID가 없습니다.' },
+      { status: 400 }
+    );
+  }
+
+  const { data, error } = await supabase
+    .from('chat')
+    .select('*')
+    .eq('room_id', roomId);
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(data, { status: 200 });
+}

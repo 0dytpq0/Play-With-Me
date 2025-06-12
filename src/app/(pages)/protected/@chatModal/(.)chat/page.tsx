@@ -11,7 +11,7 @@ export default async function ChatModal({
 }: {
   searchParams: Props;
 }) {
-  const { mate: mateId } = searchParams;
+  const { mate: mateId } = await searchParams;
   const user = await getUser();
 
   return (

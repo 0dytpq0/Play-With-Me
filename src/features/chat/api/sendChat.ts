@@ -1,29 +1,13 @@
 import { fetcher } from '@/shared/lib/utils';
-
-// src/features/chat/api/sendMessage.ts
-export type SendMessageParams = {
-  roomId: string;
-  senderId: string;
-  content: string;
-};
-
-export type SendMessageResponse = {
-  chat: {
-    id: string;
-    room_id: string;
-    sender_id: string;
-    content: string;
-    created_at: string;
-  };
-};
+import { SendChatParams, SendChatResponse } from '../model/types';
 
 export async function sendChat(
-  params: SendMessageParams
-): Promise<SendMessageResponse> {
+  params: SendChatParams
+): Promise<SendChatResponse[]> {
   const res = await fetcher('/api/chat', {
     method: 'POST',
     body: params,
   });
 
-  return res as SendMessageResponse;
+  return res as SendChatResponse[];
 }

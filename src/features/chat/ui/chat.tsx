@@ -2,66 +2,48 @@
 
 import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-/**
- * Simple Chat UI (local state only)
- * @returns {JSX.Element}
- */
-import { useState, FormEvent } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { sendChat } from '../api/sendChat';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-/**
- * 메시지 타입
- */
-type Message = {
-  id: number;
-  sender: 'me' | 'other';
-  content: string;
-};
+import { useState, MouseEvent } from 'react';
+import { fetchChat, sendChat } from '../api';
+import { SendChatResponse } from '../model/types';
 
 interface ChatProps {
   userId: string;
   mateId: string;
 }
-type ChatForm = {
-  message: string;
-};
+
 export default function Chat({ userId, mateId }: ChatProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, sender: 'other', content: '안녕하세요!' },
-    {
-      id: 2,
-      sender: 'me',
-      content:
-        '안녕하세요! 무엇을 도와드릴까요?안녕하세요! 무엇을 도와드릴까요?',
-    },
-  ]);
-  const [chat, setChat] = useState<string>('');
-
-  const { mutate } = useMutation({
-    mutationFn: sendChat,
-    onSuccess: () => {
-      setChat('');
-    },
-  });
-
+  const [chatMessage, setChatMessage] = useState<string>('');
   const genRoomId = (userId: string, mateId: string) => {
     const roomId = [userId, mateId].sort().join('-');
     return roomId;
   };
+  const queryClient = useQueryClient();
+  const { data: chatMessages } = useQuery<SendChatResponse[]>({
+    queryKey: ['chat', genRoomId(userId, mateId)],
+    queryFn: () => fetchChat(genRoomId(userId, mateId)),
+  });
+  const { mutate } = useMutation({
+    mutationFn: sendChat,
+    onSuccess: () => {
+      setChatMessage('');
+      queryClient.invalidateQueries({
+        queryKey: ['chat', genRoomId(userId, mateId)],
+      });
+    },
+  });
 
   /**
    * 메시지 전송 핸들러
    */
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSend = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log('onSubmit', chat);
+    console.log('123123', 123123);
     mutate({
       roomId: genRoomId(userId, mateId),
       senderId: userId,
-      content: chat,
+      content: chatMessage,
     });
   };
   return (
@@ -71,15 +53,15 @@ export default function Chat({ userId, mateId }: ChatProps) {
     >
       <h1>메이트 아이디 태그</h1>
       <div className='flex-1 overflow-y-auto space-y-2 pr-2'>
-        {messages.map((msg) => (
+        {chatMessages?.map((msg) => (
           <div
             key={msg.id}
-            className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${msg.sender_id === userId ? 'justify-end' : 'justify-start'}`}
           >
             <div
               className={`px-4 py-2 rounded-2xl max-w-[60%] break-words text-sm '
                 ${
-                  msg.sender === 'me'
+                  msg.sender_id === userId
                     ? 'bg-purple-600 text-white rounded-br-none'
                     : 'bg-slate-200 text-black rounded-bl-none'
                 }`}
@@ -89,17 +71,20 @@ export default function Chat({ userId, mateId }: ChatProps) {
           </div>
         ))}
       </div>
-      <form onSubmit={onSubmit} className='flex gap-2 mt-2 items-end'>
+      <div className='flex gap-2 mt-2 items-end'>
         <Textarea
           className='scrollbar-hide flex-1 w-0 p-3 rounded-lg text-black bg-white focus:outline-purple-500 resize-none'
           autoFocus
-          value={chat}
-          onChange={(e) => setChat(e.target.value)}
+          value={chatMessage}
+          onChange={(e) => setChatMessage(e.target.value)}
         />
-        <Button type='submit' className='bg-purple-600 hover:bg-purple-700 '>
+        <Button
+          onClick={handleSend}
+          className='bg-purple-600 hover:bg-purple-700 '
+        >
           전송
         </Button>
-      </form>
+      </div>
     </div>
   );
 }
