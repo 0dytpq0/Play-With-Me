@@ -4,11 +4,20 @@ import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { useState, MouseEvent, KeyboardEvent, useRef, useEffect } from 'react';
+import {
+  useState,
+  MouseEvent,
+  KeyboardEvent,
+  useRef,
+  useEffect,
+  useMemo,
+} from 'react';
 import { sendChat } from '../api';
 import { useRealtimeChat } from '../hooks/useRealtimeChat';
 import { getUserClient } from '@/entities/user/api/getUserClient';
 import { cn } from '@/shared/lib/utils';
+import { GRADIENTS } from '../model/constants';
+import { genGradient, genRoomId } from '../lib/utils';
 
 interface ChatProps {
   userId: string;
@@ -17,7 +26,9 @@ interface ChatProps {
 
 export default function Chat({ userId, mateId }: ChatProps) {
   const [chatMessage, setChatMessage] = useState<string>('');
-  const { data: user, isLoading } = useQuery({
+  const { chatMessages, mutate } = useRealtimeChat(userId, mateId);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const { data: user } = useQuery({
     queryKey: ['user', mateId],
     queryFn: () => getUserClient({ userId: mateId }),
     select: (data) => ({
@@ -26,43 +37,13 @@ export default function Chat({ userId, mateId }: ChatProps) {
     }),
   });
   const [game_nickname, game_tag] = user?.game_nickname || [];
-  console.log('user', user);
-  const genRoomId = (userId: string, mateId: string) => {
-    const roomId = [userId, mateId].sort().join('-');
-    return roomId;
-  };
-  const { data: chatMessages } = useRealtimeChat(userId, mateId);
-  const queryClient = useQueryClient();
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-
+  const memoizedGradient = useMemo(() => genGradient(), [mateId]);
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
   }, [chatMessages]);
-  const { mutate } = useMutation({
-    mutationFn: sendChat,
-    onSuccess: () => {
-      setChatMessage('');
-      queryClient.invalidateQueries({
-        queryKey: ['chat', genRoomId(userId, mateId)],
-      });
-    },
-  });
-
-  const GRADIENTS = [
-    'bg-gradient-to-r from-purple-400 via-pink-500 to-orange-500',
-    'bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400',
-    'bg-gradient-to-r from-red-400 via-yellow-400 to-green-400',
-    'bg-gradient-to-r from-fuchsia-400 via-pink-400 to-rose-400',
-    'bg-gradient-to-r from-indigo-400 via-sky-400 to-emerald-400',
-    'bg-gradient-to-r from-orange-400 via-yellow-400 to-green-400',
-    'bg-gradient-to-r from-purple-400 via-indigo-400 to-pink-500',
-    'bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400',
-    'bg-gradient-to-r from-green-400 via-teal-400 to-cyan-400',
-    'bg-gradient-to-r from-blue-400 via-sky-400 to-emerald-400',
-  ];
 
   const handleSend = (
     e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLTextAreaElement>
@@ -73,6 +54,7 @@ export default function Chat({ userId, mateId }: ChatProps) {
       senderId: userId,
       content: chatMessage,
     });
+    setChatMessage('');
   };
   return (
     <div
@@ -83,7 +65,7 @@ export default function Chat({ userId, mateId }: ChatProps) {
         <span
           className={cn(
             'text-3xl font-bold bg-clip-text text-transparent',
-            GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)]
+            memoizedGradient
           )}
         >
           {game_nickname}

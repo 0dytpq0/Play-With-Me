@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/shared/lib/supabase/client';
-import { fetchChat } from '../api';
+import { fetchChat, sendChat } from '../api';
 import { SendChatResponse } from '../model/types';
+import { useMutation } from '@tanstack/react-query';
 
 /**
  * 실시간 채팅 메시지 구독 및 react-query 연동 커스텀 훅
@@ -14,7 +15,22 @@ export function useRealtimeChat(userId: string, mateId: string) {
   const queryClient = useQueryClient();
   const roomId = [userId, mateId].sort().join('-');
 
-  const query = useQuery<SendChatResponse[]>({
+  const { mutate } = useMutation({
+    mutationFn: sendChat,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['chat', roomId],
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+  const {
+    data: chatMessages,
+    isLoading,
+    isError,
+  } = useQuery<SendChatResponse[]>({
     queryKey: ['chat', roomId],
     queryFn: () => fetchChat(roomId),
   });
@@ -42,6 +58,6 @@ export function useRealtimeChat(userId: string, mateId: string) {
     };
   }, [roomId, queryClient]);
 
-  return query;
+  return { chatMessages, isLoading, isError, mutate };
 }
 

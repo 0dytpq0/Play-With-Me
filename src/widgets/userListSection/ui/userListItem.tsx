@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation';
 const UserListItem = ({ user, userId }: { user: User; userId: string }) => {
   const router = useRouter();
   const handleClick = () => {
+    if (user.id === userId) {
+      return;
+    }
     router.replace(`?mate=${user.id}`);
   };
   console.log('user.id, userId', user.id, userId);
