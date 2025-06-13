@@ -43,8 +43,8 @@ export function MateSection({ userId }: MateSectionProps) {
         <Button asChild className='w-full bg-purple-600 hover:bg-purple-700'>
           <Link href={`/protected/chat?mate=${mateId}`}>채팅 시작</Link>
         </Button>
-        <Button className='w-full bg-purple-600 hover:bg-purple-700'>
-          듀오 신청
+        <Button asChild className='w-full bg-purple-600 hover:bg-purple-700'>
+          <Link href={`/protected/reservate?mate=${mateId}`}>듀오 신청</Link>
         </Button>
       </div>
     </>

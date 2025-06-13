@@ -43,7 +43,7 @@ export function SignupForm() {
         onClick={(e) => e.stopPropagation()}
         className='relative flex flex-col items-center gap-4 justify-center bg-background rounded-xl shadow-2xl p-8 min-w-[340px]'
       >
-        <BackButton />
+        <BackButton position='left' />
 
         <h1 className='text-2xl font-bold mt-4'>회원가입</h1>
         <AuthForm form={form} onSubmit={onSubmit} formType='signup'>

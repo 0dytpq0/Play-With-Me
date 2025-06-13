@@ -41,7 +41,7 @@ export default function MeForm({ userId }: { userId: string }): JSX.Element {
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <BackButton />
+        <BackButton position='left' />
 
         <MeFormSubmitButton
           isEdit={isEdit}
