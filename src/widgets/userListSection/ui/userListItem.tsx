@@ -11,7 +11,6 @@ const UserListItem = ({ user, userId }: { user: User; userId: string }) => {
     }
     router.replace(`?mate=${user.id}`);
   };
-  console.log('user.id, userId', user.id, userId);
   const [nickname, tag] = user.game_nickname.split('#');
   return (
     <div

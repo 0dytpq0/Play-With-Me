@@ -5,7 +5,6 @@ export const getChatList = async ({ userId }: { userId: string }) => {
     const res = await fetcher(`/api/chat?userId=${userId}`, {
       method: 'GET',
     });
-    console.log('res', res);
     return res;
   } catch (error) {
     console.error(error);

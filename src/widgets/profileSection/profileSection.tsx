@@ -25,7 +25,6 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     queryKey: ['chatList', userId],
     queryFn: () => getChatList({ userId }),
   });
-  console.log('chatList', chatList);
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
