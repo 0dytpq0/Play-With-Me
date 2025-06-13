@@ -11,6 +11,11 @@ export default function CalendarPopover<T extends FieldValues>({
 }: {
   field: ControllerRenderProps<T>;
 }) {
+  function isBeforeToday(date: Date) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  }
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -30,9 +35,12 @@ export default function CalendarPopover<T extends FieldValues>({
           mode='single'
           selected={field.value}
           onSelect={field.onChange}
-          disabled={(date) =>
-            date > new Date() || date < new Date('1900-01-01')
-          }
+          disabled={(date) => {
+            if (field.name === 'birthday') {
+              return date > new Date() || date < new Date('1900-01-01');
+            }
+            return isBeforeToday(date);
+          }}
           initialFocus
         />
       </PopoverContent>

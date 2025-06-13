@@ -14,7 +14,7 @@ export function useReservate({ userId, mateId }: UseReservateProps) {
     enabled: !!mateId,
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: ReservateFormType) => {
       const startHour =
         data.duoStartPeriod === 'AM'
@@ -37,5 +37,5 @@ export function useReservate({ userId, mateId }: UseReservateProps) {
     },
   });
 
-  return { mutate, mate };
+  return { mutate, mate, isPending };
 }
