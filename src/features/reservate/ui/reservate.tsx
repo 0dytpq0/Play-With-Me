@@ -21,15 +21,15 @@ import {
   SelectItem,
 } from '@/shared/ui/select';
 import { Textarea } from '@/shared/ui/textarea';
-import { Calendar } from '@/shared/ui/calendar';
 import { Button } from '@/shared/ui/button';
 import { BackButton } from '@/shared/ui/backButton';
 import CalendarPopover from '@/entities/auth/ui/CalendarPopover';
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
+import { getUserClient } from '@/entities/user/api/getUserClient';
+import { createReservation } from '../api/createReservation';
 
-/**
- * Zod schema for duo reservation form.
- */
 const reservateSchema = z.object({
   date: z.date({ required_error: '날짜를 선택하세요.' }),
   gameType: z.enum(['competitive', 'unrated', 'swift'], {
@@ -37,14 +37,26 @@ const reservateSchema = z.object({
   }),
   duoStartHour: z.string().regex(/^(1[0-2]|[1-9])$/, '1~12시를 선택하세요.'),
   duoStartPeriod: z.enum(['AM', 'PM']),
-  duoPlayPeriod: z.string(),
-  message: z.string().max(50, '최대 50자까지 입력 가능합니다.').optional(),
+  duoPlayPeriod: z.enum(['2', '4', '6', 'fulltime'], {
+    required_error: '플레이 시간을 선택하세요.',
+  }),
+  message: z.string().max(40, '최대 40자까지 입력 가능합니다.').optional(),
+  status: z.enum(['pending', 'accepted', 'rejected']),
 });
 
 type ReservateFormType = z.infer<typeof reservateSchema>;
 
 export default function Reservate() {
-  const [submitting, setSubmitting] = useState(false);
+  const searchParams = useSearchParams();
+  const mateId = searchParams.get('mate');
+
+  const { data: mate } = useQuery({
+    queryKey: ['mate', mateId],
+    queryFn: () => getUserClient({ userId: mateId! }),
+    enabled: !!mateId,
+  });
+
+  const [nickname, tag] = mate?.game_nickname.split('#') || [];
   const form = useForm<ReservateFormType>({
     resolver: zodResolver(reservateSchema),
     mode: 'onTouched',
@@ -53,38 +65,46 @@ export default function Reservate() {
       gameType: undefined,
       duoStartHour: '',
       duoStartPeriod: 'AM',
-      duoPlayPeriod: '',
+      duoPlayPeriod: '2',
       message: '',
+      status: 'pending',
     },
   });
 
-  /**
-   * 듀오 시간 선택 유효성 검사 (전/후 1시간 불가)
-   */
+  const { mutate } = useMutation({
+    mutationFn: createReservation,
+  });
 
   const onSubmit: SubmitHandler<ReservateFormType> = async (data) => {
-    setSubmitting(true);
-    // TODO: submit logic
-    setSubmitting(false);
+    const formData = new FormData();
+    const startHour =
+      data.duoStartPeriod === 'AM'
+        ? Number(data.duoStartHour)
+        : Number(data.duoStartHour) + 12;
+    const duration =
+      data.duoPlayPeriod === 'fulltime' ? 24 : Number(data.duoPlayPeriod);
+    formData.append('sender_id', 'a52012cd-6318-4796-a3c2-12abad64c6be');
+    formData.append('target_id', mateId!);
+    formData.append('date', data.date.toISOString().slice(0, 10));
+    formData.append('start_hour', startHour.toString());
+    formData.append('duration', duration.toString());
+    formData.append('game_type', data.gameType);
+    formData.append('message', data.message || '');
+    mutate(formData);
   };
 
   return (
     <>
       <h2 className='text-xl font-bold'>듀오 신청</h2>
       <BackButton position='right' />
-      <h1>아이디</h1>
-      <h1>랭크</h1>
+      <div className='flex items-end gap-2'>
+        <span className='text-2xl font-bold'>{nickname}</span>
+        <span className='text-lg font-bold'>#{tag}</span>
+      </div>
       <Form {...form}>
         <form
           className='flex-1 flex flex-col justify-between'
-          onSubmit={form.handleSubmit((data) => {
-            const submitData = {
-              ...data,
-              duoStart: data.duoStartHour,
-            };
-            console.log('data', data);
-            onSubmit(submitData as any);
-          })}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <div className='flex flex-col'>
             <FormField
@@ -200,7 +220,7 @@ export default function Reservate() {
                                 <SelectItem
                                   key={h}
                                   value={
-                                    j === 3 ? 'fullTime' : (h * 2).toString()
+                                    j === 3 ? 'fulltime' : (h * 2).toString()
                                   }
                                 >
                                   {j === 3 ? '종일' : (h * 2).toString()}
@@ -224,8 +244,9 @@ export default function Reservate() {
                   <FormLabel>메세지 (선택)</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder='한 줄 메세지 (최대 50자)'
-                      maxLength={50}
+                      placeholder='한 줄 메세지 (최대 40자)'
+                      maxLength={40}
+                      className='resize-none'
                       {...field}
                     />
                   </FormControl>
@@ -235,8 +256,8 @@ export default function Reservate() {
             />
           </div>
 
-          <Button type='submit' className='w-full' disabled={submitting}>
-            {submitting ? '신청 중...' : '신청하기'}
+          <Button type='submit' className='w-full'>
+            {'신청하기'}
           </Button>
         </form>
       </Form>
