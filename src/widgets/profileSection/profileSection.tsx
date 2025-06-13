@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserClient } from '@/entities/user/api/getUserClient';
 import { useLogout } from '@/features/auth/login/hooks';
 import { useSearchParams } from 'next/navigation';
+import { getChatList } from '@/features/chat/api/getChatList';
 
 interface ProfileSectionProps {
   userId: string;
@@ -19,6 +20,12 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     queryKey: ['user', userId],
     queryFn: () => getUserClient({ userId }),
   });
+  //TODO chatList bottomSheet 만들어서 띄우고 클릭 시 해당 챗 주소로 이동
+  const { data: chatList } = useQuery({
+    queryKey: ['chatList', userId],
+    queryFn: () => getChatList({ userId }),
+  });
+  console.log('chatList', chatList);
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
