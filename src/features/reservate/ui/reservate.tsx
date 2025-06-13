@@ -2,8 +2,6 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useState } from 'react';
 import {
   Form,
   FormField,
@@ -12,7 +10,6 @@ import {
   FormControl,
   FormMessage,
 } from '@/shared/ui/form';
-import { Input } from '@/shared/ui/Input';
 import {
   Select,
   SelectTrigger,
@@ -25,38 +22,18 @@ import { Button } from '@/shared/ui/button';
 import { BackButton } from '@/shared/ui/backButton';
 import CalendarPopover from '@/entities/auth/ui/CalendarPopover';
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { getUserClient } from '@/entities/user/api/getUserClient';
-import { createReservation } from '../api/createReservation';
-
-const reservateSchema = z.object({
-  date: z.date({ required_error: '날짜를 선택하세요.' }),
-  gameType: z.enum(['competitive', 'unrated', 'swift'], {
-    required_error: '게임 종류를 선택하세요.',
-  }),
-  duoStartHour: z.string().regex(/^(1[0-2]|[1-9])$/, '1~12시를 선택하세요.'),
-  duoStartPeriod: z.enum(['AM', 'PM']),
-  duoPlayPeriod: z.enum(['2', '4', '6', 'fulltime'], {
-    required_error: '플레이 시간을 선택하세요.',
-  }),
-  message: z.string().max(40, '최대 40자까지 입력 가능합니다.').optional(),
-  status: z.enum(['pending', 'accepted', 'rejected']),
-});
-
-type ReservateFormType = z.infer<typeof reservateSchema>;
+import { ReservateFormType } from '../model/types';
+import { reservateSchema } from '../model/schema';
+import { useReservate } from '../hooks/useReservate';
 
 export default function Reservate() {
   const searchParams = useSearchParams();
   const mateId = searchParams.get('mate');
-
-  const { data: mate } = useQuery({
-    queryKey: ['mate', mateId],
-    queryFn: () => getUserClient({ userId: mateId! }),
-    enabled: !!mateId,
-  });
-
+  const userId = 'a52012cd-6318-4796-a3c2-12abad64c6be';
+  const { mutate, mate } = useReservate({ userId, mateId: mateId! });
   const [nickname, tag] = mate?.game_nickname.split('#') || [];
+
   const form = useForm<ReservateFormType>({
     resolver: zodResolver(reservateSchema),
     mode: 'onTouched',
@@ -71,26 +48,8 @@ export default function Reservate() {
     },
   });
 
-  const { mutate } = useMutation({
-    mutationFn: createReservation,
-  });
-
   const onSubmit: SubmitHandler<ReservateFormType> = async (data) => {
-    const formData = new FormData();
-    const startHour =
-      data.duoStartPeriod === 'AM'
-        ? Number(data.duoStartHour)
-        : Number(data.duoStartHour) + 12;
-    const duration =
-      data.duoPlayPeriod === 'fulltime' ? 24 : Number(data.duoPlayPeriod);
-    formData.append('sender_id', 'a52012cd-6318-4796-a3c2-12abad64c6be');
-    formData.append('target_id', mateId!);
-    formData.append('date', data.date.toISOString().slice(0, 10));
-    formData.append('start_hour', startHour.toString());
-    formData.append('duration', duration.toString());
-    formData.append('game_type', data.gameType);
-    formData.append('message', data.message || '');
-    mutate(formData);
+    mutate(data);
   };
 
   return (
