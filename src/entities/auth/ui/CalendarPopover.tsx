@@ -4,13 +4,12 @@ import { Calendar } from '@/shared/ui/calendar';
 import { format } from 'date-fns';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { FormControl } from '@/shared/ui/form';
-import { ControllerRenderProps } from 'react-hook-form';
-import { SignUpFormType } from '../model/types';
+import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 
-export default function CalendarPopover({
+export default function CalendarPopover<T extends FieldValues>({
   field,
 }: {
-  field: ControllerRenderProps<SignUpFormType, 'birthday'>;
+  field: ControllerRenderProps<T>;
 }) {
   return (
     <Popover>
@@ -19,7 +18,7 @@ export default function CalendarPopover({
           <Button
             type='button'
             variant='outline'
-            className='w-full px-2 text-muted-foreground'
+            className='w-full px-2 text-muted-foreground hover:scale-100'
           >
             {field.value ? format(field.value, 'yyyy-MM-dd') : '생년월일 선택'}
             <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />

@@ -76,7 +76,7 @@ export function SignupForm() {
               name='birthday'
               render={({ field }) => (
                 <FormItem className='flex-1'>
-                  <CalendarPopover field={field} />
+                  <CalendarPopover<SignUpFormType> field={field} />
                   <FormMessage />
                 </FormItem>
               )}

@@ -17,7 +17,7 @@ export default function SliderBackground({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className='relative h-full w-full max-w-md bg-background shadow-2xl p-8 flex flex-col gap-4'
+        className='relative h-full w-full max-w-md bg-background shadow-2xl p-4 flex flex-col gap-4'
       >
         {children}
       </div>
