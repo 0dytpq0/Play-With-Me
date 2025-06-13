@@ -1,9 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/lib/supabase/server';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  const { userId } = await params;
+  console.log('userId', userId);
   if (!userId) {
     return NextResponse.json({ error: 'userId is not found' }, { status: 400 });
   }
@@ -22,9 +25,12 @@ export async function GET(request: Request) {
   return NextResponse.json(user, { status: 200 });
 }
 
-export async function PATCH(request: Request) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  const { userId } = await params;
   const formData = await request.formData();
-  const userId = formData.get('userId');
   const game_nickname = formData.get('game_nickname');
   const tier = formData.get('tier');
   const one_line = formData.get('one_line');

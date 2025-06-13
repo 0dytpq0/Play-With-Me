@@ -2,11 +2,17 @@ import { User } from '@/entities/user/model/types';
 import UserListItem from './userListItem';
 import { useMemo } from 'react';
 
-export default function UserList({ users }: { users: User[] }) {
+export default function UserList({
+  users,
+  userId,
+}: {
+  users: User[];
+  userId: string;
+}) {
   const memoizedUserList = useMemo(
     () =>
       users.map((user: User) => {
-        return <UserListItem key={user.id} user={user} />;
+        return <UserListItem key={user.id} user={user} userId={userId} />;
       }),
     [users]
   );

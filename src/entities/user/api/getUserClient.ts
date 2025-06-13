@@ -9,12 +9,6 @@ export const getUserClient = async ({ userId }: { userId: string }) => {
     }
     const data = await fetcher<User>(`/api/user/${userId}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      query: {
-        userId,
-      },
     });
 
     return data;
