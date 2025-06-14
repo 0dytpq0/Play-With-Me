@@ -13,7 +13,7 @@ interface ReservateProps {
   userId: string;
 }
 
-export default function Reservate({ mateId, userId }: ReservateProps) {
+export function Reservate({ mateId, userId }: ReservateProps) {
   const { mutate, mate, isPending } = useReservate({ userId, mateId });
   const [nickname, tag] = mate?.game_nickname.split('#') || [];
 

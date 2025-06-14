@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import SliderBackground from '@/shared/ui/sliderBackground';
-import Reservate from '@/features/reservate/ui/reservate';
 import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { dehydrate } from '@tanstack/react-query';
 import { getUser } from '@/entities/user/api/getUser';
 import { getUserById } from '@/entities/user/api/getUserById';
+import { Reservate } from '@/features/reservate/ui';
 
 interface Props {
   searchParams: {
