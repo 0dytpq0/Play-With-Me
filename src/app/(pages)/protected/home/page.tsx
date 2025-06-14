@@ -63,7 +63,7 @@ export default async function HomePage() {
               <ProfileSection userId={user?.id} />
             </GlazeBox>
             <GlazeBox className='w-full flex-1 flex flex-col gap-2'>
-              <MateSection userId={user?.id} />
+              <MateSection />
             </GlazeBox>
           </div>
         </div>

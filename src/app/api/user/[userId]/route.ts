@@ -6,7 +6,6 @@ export async function GET(
   { params }: { params: { userId: string } }
 ) {
   const { userId } = await params;
-  console.log('userId', userId);
   if (!userId) {
     return NextResponse.json({ error: 'userId is not found' }, { status: 400 });
   }

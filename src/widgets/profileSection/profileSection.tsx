@@ -3,11 +3,23 @@
 import { UserCard } from '@/entities/user/ui/userCard';
 import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { getUserClient } from '@/entities/user/api/getUserClient';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getUserById } from '@/entities/user/api/getUserById';
 import { useLogout } from '@/features/auth/login/hooks';
 import { useSearchParams } from 'next/navigation';
-import { getChatList } from '@/features/chat/api/getChatList';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/ui/dialog';
+import { getReservations } from '@/features/reservate/api';
+import { ReservationResponse } from '@/features/reservate/model/types';
+import Image from 'next/image';
+import { patchReservation } from '@/features/reservate/api/patchReservation';
+import { ReservationListModal } from '@/features/reservate/ui';
 
 interface ProfileSectionProps {
   userId: string;
@@ -18,14 +30,14 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
   const mateId = params.get('mate');
   const { data: user, isLoading } = useQuery({
     queryKey: ['user', userId],
-    queryFn: () => getUserClient({ userId }),
+    queryFn: () => getUserById({ userId }),
   });
+
   //TODO chatList bottomSheet 만들어서 띄우고 클릭 시 해당 챗 주소로 이동
-  const { data: chatList } = useQuery({
-    queryKey: ['chatList', userId],
-    queryFn: () => getChatList({ userId }),
-  });
-  console.log('chatList', chatList);
+  // const { data: chatList } = useQuery({
+  //   queryKey: ['chatList', userId],
+  //   queryFn: () => getChatList({ userId }),
+  // });
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
@@ -45,6 +57,7 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
           <Button className='w-full bg-purple-600 hover:bg-purple-700'>
             전체 채팅 목록
           </Button>
+          <ReservationListModal userId={user.id} />
           <Button
             className='w-full bg-purple-600 hover:bg-purple-700'
             onClick={() => logout()}

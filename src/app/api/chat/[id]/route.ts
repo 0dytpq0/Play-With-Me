@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
     sender_id: senderId,
     content,
   });
-  console.log('data', data);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -42,7 +41,6 @@ export async function GET(
     .from('chat')
     .select('*')
     .eq('room_id', roomId);
-  console.log('data, roomId', data, roomId);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

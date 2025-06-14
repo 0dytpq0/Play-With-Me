@@ -1,11 +1,22 @@
+import { getUser } from '@/entities/user/api/getUser';
 import Chat from '@/features/chat/ui/chat';
 import ModalBackground from '@/shared/ui/modalBackground';
 
-export default function ChatModal() {
+interface Props {
+  mate: string;
+}
+
+export default async function ChatModal({
+  searchParams,
+}: {
+  searchParams: Props;
+}) {
+  const { mate: mateId } = await searchParams;
+  const user = await getUser();
+
   return (
     <ModalBackground>
-      <div>쳇</div>
-      {/* <Chat /> */}
+      <Chat userId={user.id} mateId={mateId} />
     </ModalBackground>
   );
 }

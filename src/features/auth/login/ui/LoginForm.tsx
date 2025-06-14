@@ -33,7 +33,7 @@ export function LoginForm() {
         onClick={(e) => e.stopPropagation()}
         className='relative flex flex-col items-center gap-4 justify-center bg-background rounded-xl shadow-2xl p-8 min-w-[340px]'
       >
-        <BackButton />
+        <BackButton position='left' />
 
         <Button asChild variant={'link'} className='absolute top-2 right-2'>
           <Link href={'/auth/signup'} className='flex items-center gap-1'>

@@ -3,8 +3,16 @@
 import { Button } from '@/shared/ui/button';
 import { useRouter } from 'next/navigation';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { cn } from '../lib/utils';
 
-export function BackButton() {
+interface BackButtonProps {
+  className?: string;
+  position: 'right' | 'left';
+}
+
+export function BackButton({ className, position }: BackButtonProps) {
+  const buttonPosition = position === 'right' ? 'right-2' : 'left-2';
+
   const router = useRouter();
   return (
     <Button
@@ -13,7 +21,7 @@ export function BackButton() {
       }}
       variant={'ghost'}
       size={'icon'}
-      className='absolute top-2 left-2'
+      className={cn('absolute top-2', buttonPosition, className)}
     >
       <Cross2Icon />
     </Button>
