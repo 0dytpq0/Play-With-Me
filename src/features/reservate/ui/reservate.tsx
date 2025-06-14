@@ -2,37 +2,19 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/shared/ui/form';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/shared/ui/select';
-import { Textarea } from '@/shared/ui/textarea';
-import { Button } from '@/shared/ui/button';
 import { BackButton } from '@/shared/ui/backButton';
-import CalendarPopover from '@/entities/auth/ui/CalendarPopover';
-import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
-import { useSearchParams } from 'next/navigation';
 import { ReservateFormType } from '../model/types';
 import { reservateSchema } from '../model/schema';
 import { useReservate } from '../hooks/useReservate';
 import { ReservateForm } from './reservateForm';
 
-export default function Reservate() {
-  const searchParams = useSearchParams();
-  const mateId = searchParams.get('mate');
-  const userId = 'a52012cd-6318-4796-a3c2-12abad64c6be';
-  const { mutate, mate, isPending } = useReservate({ userId, mateId: mateId! });
+interface ReservateProps {
+  mateId: string;
+  userId: string;
+}
+
+export default function Reservate({ mateId, userId }: ReservateProps) {
+  const { mutate, mate, isPending } = useReservate({ userId, mateId });
   const [nickname, tag] = mate?.game_nickname.split('#') || [];
 
   const form = useForm<ReservateFormType>({
@@ -65,4 +47,3 @@ export default function Reservate() {
     </>
   );
 }
-

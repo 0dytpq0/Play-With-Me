@@ -14,7 +14,7 @@ import {
 } from 'react';
 import { sendChat } from '../api';
 import { useRealtimeChat } from '../hooks/useRealtimeChat';
-import { getUserClient } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserClient';
 import { genRoomId } from '../lib/utils';
 import ChatHeader from './chatHeader';
 import ChatList from './chatList';
@@ -30,7 +30,7 @@ export default function Chat({ userId, mateId }: ChatProps) {
   const { chattings, mutate } = useRealtimeChat(userId, mateId);
   const { data: user } = useQuery({
     queryKey: ['user', mateId],
-    queryFn: () => getUserClient({ userId: mateId }),
+    queryFn: () => getUserById({ userId: mateId }),
   });
 
   const handleSend = (

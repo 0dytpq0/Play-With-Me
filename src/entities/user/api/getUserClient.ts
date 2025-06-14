@@ -1,8 +1,7 @@
-import { createClient } from '@/shared/lib/supabase/client';
 import { fetcher } from '@/shared/lib/utils';
 import { User } from '../model/types';
 
-export const getUserClient = async ({ userId }: { userId: string }) => {
+export const getUserById = async ({ userId }: { userId: string }) => {
   try {
     if (!userId || userId.length <= 0) {
       throw new Error('유저 ID가 없습니다.');

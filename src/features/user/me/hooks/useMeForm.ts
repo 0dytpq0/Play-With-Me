@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getUserClient } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserClient';
 import { MeFormData } from '../model/type';
 import { meFormSchema } from '../model/schema';
 import { updateUser } from '@/entities/user/api/updateUser';
@@ -19,7 +19,7 @@ export const useMeForm = ({ userId }: { userId: string }) => {
   // 유저 정보 불러오기
   const { data: user, isLoading } = useQuery({
     queryKey: ['user', userId],
-    queryFn: () => getUserClient({ userId }),
+    queryFn: () => getUserById({ userId }),
   });
 
   // 폼 상태 관리

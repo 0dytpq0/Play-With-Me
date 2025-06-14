@@ -4,7 +4,7 @@ import { UserCard } from '@/entities/user/ui/userCard';
 import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { getUserClient } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserClient';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -22,7 +22,7 @@ export function MateSection({ userId }: MateSectionProps) {
     isError,
   } = useQuery({
     queryKey: ['mate', mateId],
-    queryFn: () => getUserClient({ userId: mateId || '' }),
+    queryFn: () => getUserById({ userId: mateId || '' }),
   });
 
   if (!user || isLoading || isError) {

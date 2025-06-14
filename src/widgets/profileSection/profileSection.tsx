@@ -4,7 +4,7 @@ import { UserCard } from '@/entities/user/ui/userCard';
 import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { getUserClient } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserClient';
 import { useLogout } from '@/features/auth/login/hooks';
 import { useSearchParams } from 'next/navigation';
 import { getChatList } from '@/features/chat/api/getChatList';
@@ -18,7 +18,7 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
   const mateId = params.get('mate');
   const { data: user, isLoading } = useQuery({
     queryKey: ['user', userId],
-    queryFn: () => getUserClient({ userId }),
+    queryFn: () => getUserById({ userId }),
   });
   //TODO chatList bottomSheet 만들어서 띄우고 클릭 시 해당 챗 주소로 이동
   const { data: chatList } = useQuery({

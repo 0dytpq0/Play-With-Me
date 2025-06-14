@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createReservation } from '../api/createReservation';
 import { ReservateFormType } from '../model/types';
-import { getUserClient } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserClient';
 
 export interface UseReservateProps {
   userId: string;
@@ -10,7 +10,7 @@ export interface UseReservateProps {
 export function useReservate({ userId, mateId }: UseReservateProps) {
   const { data: mate } = useQuery({
     queryKey: ['mate', mateId],
-    queryFn: () => getUserClient({ userId: mateId! }),
+    queryFn: () => getUserById({ userId: mateId! }),
     enabled: !!mateId,
   });
 
