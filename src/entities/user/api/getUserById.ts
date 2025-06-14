@@ -12,9 +12,7 @@ export const getUserById = async ({ userId }: { userId: string }) => {
 
     return data;
   } catch (error) {
-    console.error('클라이언트 유저 호출 에러 :', error);
-    throw new Error(
-      error instanceof Error ? error.message : '클라이언트 유저 호출 에러'
-    );
+    console.error('유저 호출 에러 :', error);
+    throw new Error(error instanceof Error ? error.message : '유저 호출 에러');
   }
 };

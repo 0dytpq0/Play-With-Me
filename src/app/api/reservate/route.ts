@@ -1,10 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/lib/supabase/server'; // supabase server client import 필요
 
+export async function GET(req: NextRequest) {
+  const supabase = await createClient();
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get('userId');
+  if (!userId) {
+    return NextResponse.json(
+      { error: '사용자 ID가 없습니다.' },
+      { status: 400 }
+    );
+  }
+  const { data, error } = await supabase
+    .from('reservations')
+    .select('*')
+    .eq('target_id', userId)
+    .eq('status', 'pending');
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  return NextResponse.json(data, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const formData = await req.formData();
-  console.log('123123123', formData);
   const body = Object.fromEntries(formData.entries());
 
   const {
@@ -15,6 +35,7 @@ export async function POST(req: NextRequest) {
     duration,
     game_type,
     message,
+    sender_nickname,
   } = body;
 
   const { data: reservations } = await supabase
@@ -48,6 +69,8 @@ export async function POST(req: NextRequest) {
       duration: Number(duration),
       game_type,
       message,
+      sender_nickname,
+      status: 'pending',
     },
   ]);
 

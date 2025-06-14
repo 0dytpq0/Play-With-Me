@@ -14,6 +14,12 @@ export function useReservate({ userId, mateId }: UseReservateProps) {
     enabled: !!mateId,
   });
 
+  const { data: user } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => getUserById({ userId }),
+    enabled: !!userId,
+  });
+
   const { mutate, isPending } = useMutation({
     mutationFn: (data: ReservateFormType) => {
       const startHour =
@@ -32,10 +38,10 @@ export function useReservate({ userId, mateId }: UseReservateProps) {
       formData.append('game_type', data.gameType);
       formData.append('message', data.message || '');
       formData.append('status', data.status);
-
+      formData.append('sender_nickname', user?.game_nickname || '');
       return createReservation(formData);
     },
   });
 
-  return { mutate, mate, isPending };
+  return { mutate, mate, user, isPending };
 }

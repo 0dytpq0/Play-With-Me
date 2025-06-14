@@ -36,7 +36,6 @@ export async function fetcher<TResponse = unknown>(
   } = {}
 ): Promise<TResponse> {
   const { method = 'GET', body, headers = {}, query } = options;
-
   let requestUrl = url;
   if (query && Object.keys(query).length > 0) {
     const params = new URLSearchParams();

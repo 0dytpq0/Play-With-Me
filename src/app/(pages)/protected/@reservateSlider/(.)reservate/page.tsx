@@ -19,6 +19,7 @@ export default async function ReservateSlider({ searchParams }: Props) {
   const user = await getUser();
 
   queryClient.setQueryData(['mate', mateId], mate);
+  queryClient.setQueryData(['user', user.id], user);
 
   const dehydratedState = dehydrate(queryClient);
   return (

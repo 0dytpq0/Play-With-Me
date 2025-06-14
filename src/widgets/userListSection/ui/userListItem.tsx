@@ -2,15 +2,18 @@ import { User } from '@/entities/user/model/types';
 import Image from 'next/image';
 import { memo } from 'react';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/shared/lib/utils';
 
 const UserListItem = ({ user, userId }: { user: User; userId: string }) => {
   const router = useRouter();
+
   const handleClick = () => {
     if (user.id === userId) {
       return;
     }
     router.replace(`?mate=${user.id}`);
   };
+
   const [nickname, tag] = user.game_nickname.split('#');
   return (
     <div
@@ -19,7 +22,10 @@ const UserListItem = ({ user, userId }: { user: User; userId: string }) => {
     >
       <div
         onClick={handleClick}
-        className={`relative min-w-24 w-24 h-24 aspect-auto rounded-lg overflow-hidden bg-white/50 cursor-pointer ${user.id === userId && 'cursor-not-allowed'}`}
+        className={cn(
+          `relative min-w-24 w-24 h-24 aspect-auto rounded-lg overflow-hidden bg-white/50 cursor-pointer`,
+          user.id === userId && 'cursor-not-allowed'
+        )}
       >
         <Image
           src={user.profile_image || '/Icon/avatar.png'}
