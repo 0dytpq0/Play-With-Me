@@ -3,7 +3,7 @@
 import { UserCard } from '@/entities/user/ui/userCard';
 import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getUserById } from '@/entities/user/api/getUserById';
 import { useLogout } from '@/features/auth/login/hooks';
 import { useSearchParams } from 'next/navigation';
@@ -18,6 +18,7 @@ import {
 import { getReservations } from '@/features/reservate/api';
 import { ReservationResponse } from '@/features/reservate/model/types';
 import Image from 'next/image';
+import { patchReservation } from '@/features/reservate/api/patchReservation';
 
 interface ProfileSectionProps {
   userId: string;
@@ -26,6 +27,7 @@ interface ProfileSectionProps {
 export function ProfileSection({ userId }: ProfileSectionProps) {
   const params = useSearchParams();
   const mateId = params.get('mate');
+  const queryClient = useQueryClient();
   const { data: user, isLoading } = useQuery({
     queryKey: ['user', userId],
     queryFn: () => getUserById({ userId }),
@@ -34,6 +36,14 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     queryKey: ['reservations', userId],
     queryFn: () => getReservations({ userId }),
     enabled: !!userId,
+  });
+  const { mutate } = useMutation({
+    mutationFn: patchReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['reservations', userId],
+      });
+    },
   });
   console.log('reservations', reservations);
   //TODO chatList bottomSheet 만들어서 띄우고 클릭 시 해당 챗 주소로 이동
@@ -72,7 +82,7 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
                   듀오 신청 목록
                 </DialogTitle>
               </DialogHeader>
-              <div className='flex flex-col gap-6 max-h-[60vh] scrollbar pr-2 overflow-y-auto'>
+              <div className='flex flex-col gap-6 h-[60vh] max-h-[60vh] scrollbar pr-2 overflow-y-auto'>
                 {reservations ? (
                   reservations.map((reservation) => (
                     <div
@@ -113,6 +123,9 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
                       </div>
                       <div className='flex gap-3 justify-end mt-2'>
                         <Button
+                          onClick={() =>
+                            mutate({ id: reservation.id, status: 'rejected' })
+                          }
                           variant='outline'
                           className='border-red-500 text-red-500 hover:bg-red-500/20'
                           size='sm'
@@ -120,6 +133,9 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
                           거절
                         </Button>
                         <Button
+                          onClick={() =>
+                            mutate({ id: reservation.id, status: 'accepted' })
+                          }
                           className='bg-violet-600 hover:bg-violet-700 text-white'
                           size='sm'
                         >
