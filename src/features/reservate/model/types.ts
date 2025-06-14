@@ -12,6 +12,9 @@ export interface ReservationResponse {
   id: string;
   sender_id: string;
   target_id: string;
+  sender_nickname: string;
+  sender_tier: string;
+  sender_image: string;
   date: string; // YYYY-MM-DD
   start_hour: number;
   duration: number;

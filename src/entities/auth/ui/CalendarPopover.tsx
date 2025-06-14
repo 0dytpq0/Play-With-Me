@@ -25,7 +25,11 @@ export default function CalendarPopover<T extends FieldValues>({
             variant='outline'
             className='w-full px-2 text-muted-foreground hover:scale-100'
           >
-            {field.value ? format(field.value, 'yyyy-MM-dd') : '생년월일 선택'}
+            {field.value
+              ? format(field.value, 'yyyy-MM-dd')
+              : field.name === 'birthday'
+                ? '생년월일 선택'
+                : '날짜 선택'}
             <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
           </Button>
         </FormControl>

@@ -39,6 +39,8 @@ export function useReservate({ userId, mateId }: UseReservateProps) {
       formData.append('message', data.message || '');
       formData.append('status', data.status);
       formData.append('sender_nickname', user?.game_nickname || '');
+      formData.append('sender_tier', user?.tier || '');
+      formData.append('sender_image', user?.profile_image || '');
       return createReservation(formData);
     },
   });

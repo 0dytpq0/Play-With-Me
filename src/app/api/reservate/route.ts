@@ -36,6 +36,8 @@ export async function POST(req: NextRequest) {
     game_type,
     message,
     sender_nickname,
+    sender_image,
+    sender_tier,
   } = body;
 
   const { data: reservations } = await supabase
@@ -70,6 +72,8 @@ export async function POST(req: NextRequest) {
       game_type,
       message,
       sender_nickname,
+      sender_image,
+      sender_tier,
       status: 'pending',
     },
   ]);
