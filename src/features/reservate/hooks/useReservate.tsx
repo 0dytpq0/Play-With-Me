@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createReservation } from '../api/createReservation';
 import { ReservateFormType } from '../model/types';
-import { getUserById } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserById';
 
 export interface UseReservateProps {
   userId: string;

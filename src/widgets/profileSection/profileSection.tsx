@@ -4,7 +4,7 @@ import { UserCard } from '@/entities/user/ui/userCard';
 import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { getUserById } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserById';
 import { useLogout } from '@/features/auth/login/hooks';
 import { useSearchParams } from 'next/navigation';
 import { getChatList } from '@/features/chat/api/getChatList';

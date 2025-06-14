@@ -4,7 +4,7 @@ import Reservate from '@/features/reservate/ui/reservate';
 import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { dehydrate } from '@tanstack/react-query';
 import { getUser } from '@/entities/user/api/getUser';
-import { getUserById } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserById';
 
 interface Props {
   searchParams: {

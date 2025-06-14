@@ -4,15 +4,11 @@ import { UserCard } from '@/entities/user/ui/userCard';
 import { UserAvatar } from '@/entities/user/ui/userAvatar';
 import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { getUserById } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserById';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-interface MateSectionProps {
-  userId: string;
-}
-
-export function MateSection({ userId }: MateSectionProps) {
+export function MateSection() {
   const searchParams = useSearchParams();
   const mateId = searchParams.get('mate');
 

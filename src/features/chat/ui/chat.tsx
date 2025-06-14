@@ -14,7 +14,7 @@ import {
 } from 'react';
 import { sendChat } from '../api';
 import { useRealtimeChat } from '../hooks/useRealtimeChat';
-import { getUserById } from '@/entities/user/api/getUserClient';
+import { getUserById } from '@/entities/user/api/getUserById';
 import { genRoomId } from '../lib/utils';
 import ChatHeader from './chatHeader';
 import ChatList from './chatList';
