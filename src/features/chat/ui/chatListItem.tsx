@@ -1,10 +1,17 @@
 import Image from 'next/image';
 import { ChatListItemType } from '../model/types';
 import { memo } from 'react';
+import Link from 'next/link';
 
-export function ChatListItem({ chat }: { chat: ChatListItemType }) {
+interface ChatListItemProps {
+  chat: ChatListItemType;
+  mateId: string;
+}
+
+export function ChatListItem({ chat, mateId }: ChatListItemProps) {
   return (
-    <div
+    <Link
+      href={`/protected/chat?mate=${mateId}`}
       key={chat.id}
       className='flex items-center gap-4 bg-violet-800/50 rounded-xl p-4 shadow-lg border border-violet-500/30 hover:bg-violet-700/60 transition-colors cursor-pointer'
     >
@@ -31,7 +38,7 @@ export function ChatListItem({ chat }: { chat: ChatListItemType }) {
         </div>
         <div className='text-sm text-violet-100 truncate'>{chat.content}</div>
       </div>
-    </div>
+    </Link>
   );
 }
 

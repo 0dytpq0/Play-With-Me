@@ -1,14 +1,18 @@
-import Image from 'next/image';
 import ChatListItem from './chatListItem';
 import type { ChatListItemType } from '../model/types';
 
 interface ChatListProps {
   chatList: ChatListItemType[];
+  mateId: string;
 }
 
-export default function ChatList({ chatList }: ChatListProps) {
+export default function ChatList({ chatList, mateId }: ChatListProps) {
   return (
-    <>{chatList?.map((chat) => <ChatListItem key={chat.id} chat={chat} />)}</>
+    <>
+      {chatList?.map((chat) => (
+        <ChatListItem key={chat.id} chat={chat} mateId={mateId} />
+      ))}
+    </>
   );
 }
 
