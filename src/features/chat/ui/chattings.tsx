@@ -2,14 +2,14 @@
 
 import { useEffect, useRef } from 'react';
 import { SendChatResponse } from '../model/types';
-import ChatListItem from './chatListItem';
+import ChattingItem from './chattingItem';
 
 interface ChatListProps {
   chattings: SendChatResponse[];
   userId: string;
 }
 
-export default function ChatList({ chattings, userId }: ChatListProps) {
+export default function Chattings({ chattings, userId }: ChatListProps) {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,9 +25,8 @@ export default function ChatList({ chattings, userId }: ChatListProps) {
       className='flex-1 overflow-y-auto space-y-2 pr-2'
     >
       {chattings?.map((msg) => (
-        <ChatListItem key={msg.id} chat={msg} userId={userId} />
+        <ChattingItem key={msg.id} chat={msg} userId={userId} />
       ))}
     </div>
   );
 }
-

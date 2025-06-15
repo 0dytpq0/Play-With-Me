@@ -6,7 +6,7 @@ interface ChatListItemProps {
   userId: string;
 }
 
-const ChatListItem: FC<ChatListItemProps> = ({ chat, userId }) => (
+const ChatingItem: FC<ChatListItemProps> = ({ chat, userId }) => (
   <div
     className={`flex ${chat.sender_id === userId ? 'justify-end' : 'justify-start'}`}
   >
@@ -23,5 +23,4 @@ const ChatListItem: FC<ChatListItemProps> = ({ chat, userId }) => (
   </div>
 );
 
-export default memo(ChatListItem);
-
+export default memo(ChatingItem);

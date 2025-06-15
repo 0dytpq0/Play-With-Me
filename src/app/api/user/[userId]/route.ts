@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/lib/supabase/server';
 
+type Params = Promise<{ userId: string }>;
+
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Params }
 ) {
   const { userId } = await params;
   if (!userId) {
@@ -26,7 +28,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Params }
 ) {
   const { userId } = await params;
   const formData = await request.formData();
