@@ -1,18 +1,7 @@
 'use client';
 
-import { Button } from '@/shared/ui/button';
-import { Textarea } from '@/shared/ui/textarea';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-import {
-  useState,
-  MouseEvent,
-  KeyboardEvent,
-  useRef,
-  useEffect,
-  useMemo,
-} from 'react';
-import { sendChat } from '../api';
+import { useQuery } from '@tanstack/react-query';
+import { useState, MouseEvent, KeyboardEvent } from 'react';
 import { useRealtimeChat } from '../hooks/useRealtimeChat';
 import { getUserById } from '@/entities/user/api/getUserById';
 import { genRoomId } from '../lib/utils';

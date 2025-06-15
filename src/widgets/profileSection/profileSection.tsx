@@ -20,6 +20,8 @@ import { ReservationResponse } from '@/features/reservate/model/types';
 import Image from 'next/image';
 import { patchReservation } from '@/features/reservate/api/patchReservation';
 import { ReservationListModal } from '@/features/reservate/ui';
+import { getChatList } from '@/features/chat/api/getChatList';
+import CustomModal from '@/shared/ui/customModal';
 
 interface ProfileSectionProps {
   userId: string;
@@ -34,10 +36,12 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
   });
 
   //TODO chatList bottomSheet 만들어서 띄우고 클릭 시 해당 챗 주소로 이동
-  // const { data: chatList } = useQuery({
-  //   queryKey: ['chatList', userId],
-  //   queryFn: () => getChatList({ userId }),
-  // });
+  // chatList 호출 했으니 유아이 구현하고 라우팅 구현할것
+  const { data: chatList } = useQuery({
+    queryKey: ['chatList', userId],
+    queryFn: () => getChatList({ userId }),
+  });
+  console.log('chatList', chatList);
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
@@ -54,9 +58,13 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
           className='flex-1 h-full'
         />
         <div className='h-full flex-1 flex flex-col justify-center gap-6'>
-          <Button className='w-full bg-purple-600 hover:bg-purple-700'>
-            전체 채팅 목록
-          </Button>
+          <CustomModal title='전체 채팅 목록' triggerName='전체 채팅 목록'>
+            {chatList?.map((chat) => (
+              <div className='flex flex-col gap-3 bg-violet-800/50 rounded-xl p-5 shadow-lg border border-violet-500/30'>
+                asd
+              </div>
+            ))}
+          </CustomModal>
           <ReservationListModal userId={user.id} />
           <Button
             className='w-full bg-purple-600 hover:bg-purple-700'
