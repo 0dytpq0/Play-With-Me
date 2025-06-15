@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/lib/supabase/server';
+type Params = Promise<{ id: string }>;
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   const supabase = await createClient();
   const { status } = await req.json();
-  const { id } = params;
+  const { id } = await params;
 
   const { error } = await supabase
     .from('reservations')
