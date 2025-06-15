@@ -3,16 +3,11 @@ import type { ChatListItemType } from '../model/types';
 
 interface ChatListProps {
   chatList: ChatListItemType[];
-  mateId: string;
 }
 
-export default function ChatList({ chatList, mateId }: ChatListProps) {
+export default function ChatList({ chatList }: ChatListProps) {
   return (
-    <>
-      {chatList?.map((chat) => (
-        <ChatListItem key={chat.id} chat={chat} mateId={mateId} />
-      ))}
-    </>
+    <>{chatList?.map((chat) => <ChatListItem key={chat.id} chat={chat} />)}</>
   );
 }
 

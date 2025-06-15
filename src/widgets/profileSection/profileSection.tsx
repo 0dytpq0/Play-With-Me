@@ -31,7 +31,7 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     queryKey: ['chatList', userId],
     queryFn: () => getChatList({ userId }),
   });
-  console.log('chatList', chatList);
+
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
@@ -49,7 +49,7 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
         />
         <div className='h-full flex-1 flex flex-col justify-center gap-6'>
           <CustomModal title='전체 채팅 목록' triggerName='전체 채팅 목록'>
-            <ChatList chatList={chatList!} mateId={mateId!} />
+            <ChatList chatList={chatList!} />
           </CustomModal>
           <ReservationListModal userId={user.id} />
           <Button

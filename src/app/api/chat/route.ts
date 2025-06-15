@@ -46,6 +46,5 @@ export async function GET(request: NextRequest) {
       sender,
     };
   });
-  console.log(chatList);
   return NextResponse.json(chatList, { status: 200 });
 }
