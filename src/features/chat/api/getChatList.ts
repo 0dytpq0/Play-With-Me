@@ -1,10 +1,14 @@
 import { fetcher } from '@/shared/lib/utils';
+import { ChatListItemType } from '../model/types';
 
 export const getChatList = async ({ userId }: { userId: string }) => {
   try {
-    const res = await fetcher(`/api/chat?userId=${userId}`, {
-      method: 'GET',
-    });
+    const res = await fetcher<ChatListItemType[]>(
+      `/api/chat?userId=${userId}`,
+      {
+        method: 'GET',
+      }
+    );
     return res;
   } catch (error) {
     console.error(error);

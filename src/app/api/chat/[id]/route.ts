@@ -23,12 +23,14 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(data, { status: 200 });
 }
 
+type Params = Promise<{ id: string }>;
+
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   const supabase = await createClient();
-  const roomId = await params.id;
+  const { id: roomId } = await params;
 
   if (!roomId) {
     return NextResponse.json(

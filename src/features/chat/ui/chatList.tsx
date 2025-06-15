@@ -1,33 +1,13 @@
-'use client';
-
-import { useEffect, useRef } from 'react';
-import { SendChatResponse } from '../model/types';
 import ChatListItem from './chatListItem';
+import type { ChatListItemType } from '../model/types';
 
 interface ChatListProps {
-  chattings: SendChatResponse[];
-  userId: string;
+  chatList: ChatListItemType[];
 }
 
-export default function ChatList({ chattings, userId }: ChatListProps) {
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [chattings]);
-
+export default function ChatList({ chatList }: ChatListProps) {
   return (
-    <div
-      ref={chatContainerRef}
-      className='flex-1 overflow-y-auto space-y-2 pr-2'
-    >
-      {chattings?.map((msg) => (
-        <ChatListItem key={msg.id} chat={msg} userId={userId} />
-      ))}
-    </div>
+    <>{chatList?.map((chat) => <ChatListItem key={chat.id} chat={chat} />)}</>
   );
 }
 
