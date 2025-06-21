@@ -10,11 +10,13 @@ export function useLogin() {
     mutationFn: login,
     onSuccess: () => {
       queryClient.resetQueries();
-      router.push('/');
+      setTimeout(() => {
+        router.replace('/protected/home');
+      }, 500);
+      router.back();
     },
     onError: (error) => {
       console.error(error);
     },
   });
 }
-
