@@ -55,7 +55,9 @@ export async function fetcher<TResponse = unknown>(
   };
 
   const response = await fetch(
-    process.env.NEXT_PUBLIC_BASE_URL + requestUrl,
+    process.env.VERCEL_URL
+      ? `${process.env.VERCEL_URL}` + requestUrl
+      : `${process.env.NEXT_PUBLIC_BASE_URL}` + requestUrl,
     fetchOptions
   );
 

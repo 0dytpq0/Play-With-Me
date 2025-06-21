@@ -1,3 +1,5 @@
+import { fetcher } from '@/shared/lib/utils';
+
 /**
  * 회원가입 API 요청 함수 (클라이언트)
  * @param formData - FormData 객체 (email, password 포함)
@@ -7,12 +9,14 @@ export const login = async (
   formData: FormData
 ): Promise<{ status: string; message: string }> => {
   try {
-    const res = await fetch('http://localhost:3000/api/auth/login', {
-      method: 'POST',
-      body: formData,
-    });
-    const result = await res.json();
-    return result;
+    const res = await fetcher<{ status: string; message: string }>(
+      '/api/auth/login',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+    return res;
   } catch (error) {
     console.error(error);
     throw new Error(error instanceof Error ? error.message : '로그인 에러');
