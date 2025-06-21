@@ -1,4 +1,4 @@
-import { logout } from '@/entities/auth/api/logout';
+import { logout } from '@/entities/auth/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 

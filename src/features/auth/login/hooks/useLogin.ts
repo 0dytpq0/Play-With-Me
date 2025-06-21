@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { login } from '@/entities/auth/api/login';
+import { login } from '@/entities/auth/api';
 
 export function useLogin() {
   const queryClient = useQueryClient();
