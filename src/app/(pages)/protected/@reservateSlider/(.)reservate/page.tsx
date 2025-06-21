@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import SliderBackground from '@/shared/ui/sliderBackground';
 import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { dehydrate } from '@tanstack/react-query';
@@ -7,9 +6,9 @@ import { getUserById } from '@/entities/user/api/getUserById';
 import { Reservate } from '@/features/reservate/ui';
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     mate: string;
-  };
+  }>;
 }
 
 export default async function ReservateSlider({ searchParams }: Props) {
