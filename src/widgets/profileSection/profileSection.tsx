@@ -32,11 +32,11 @@ export function ProfileSection({ userId }: ProfileSectionProps) {
     queryFn: () => getChatList({ userId }),
   });
 
+  const { mutate: logout } = useLogout();
+
   if (!user || isLoading) {
     return <div>Loading...</div>;
   }
-
-  const { mutate: logout } = useLogout();
 
   return (
     <div className='h-full flex flex-col gap-2'>
