@@ -61,7 +61,7 @@ function Calendar({
       }}
       components={{
         IconLeft: ({ className, ...props }) => {
-          // children prop 제거
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { children, ...iconProps } = props;
           return (
             <ChevronLeftIcon
@@ -71,6 +71,7 @@ function Calendar({
           );
         },
         IconRight: ({ className, ...props }) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { children, ...iconProps } = props;
           return (
             <ChevronRightIcon
@@ -87,4 +88,3 @@ function Calendar({
 Calendar.displayName = 'Calendar';
 
 export { Calendar };
-

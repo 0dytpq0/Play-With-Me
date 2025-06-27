@@ -49,6 +49,7 @@ export const updateSession = async (request: NextRequest) => {
     }
 
     return response;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     // If you are here, a Supabase client could not be created!
     // This is likely because you have not set up environment variables.

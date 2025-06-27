@@ -9,7 +9,6 @@ import UserEditCard from './userEditCard';
 import MeFormAvatar from './meFormAvatar';
 import { useMeForm } from '../hooks';
 import MeFormSubmitButton from './meFormSubmitButton';
-import { useRouter } from 'next/navigation';
 import ModalBackground from '@/shared/ui/modalBackground';
 import { MeFormData } from '../model/type';
 

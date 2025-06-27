@@ -38,7 +38,7 @@ export default function Chat({ userId, mateId }: ChatProps) {
       onClick={(e) => e.stopPropagation()}
       className='relative flex flex-col w-[700px] h-[calc(100vh-100px)] my-10 gap-4 rounded-xl bg-background px-6 py-10 shadow-2xl'
     >
-      <ChatHeader gameNickname={user?.game_nickname!} mateId={mateId} />
+      <ChatHeader gameNickname={user?.game_nickname || ''} mateId={mateId} />
       <Chattings chattings={chattings || []} userId={userId} />
       <ChatInput
         chatMessage={chatMessage}

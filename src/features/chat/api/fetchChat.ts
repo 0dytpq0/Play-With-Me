@@ -1,4 +1,3 @@
-import { createClient } from '@/shared/lib/supabase/server';
 import { fetcher } from '@/shared/lib/utils';
 import { SendChatResponse } from '../model/types';
 
