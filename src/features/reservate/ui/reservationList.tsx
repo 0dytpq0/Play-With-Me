@@ -33,7 +33,7 @@ export function ReservationListModal({ userId }: ReservationListProps) {
         onReject={() => mutate({ id: reservation.id, status: 'rejected' })}
       />
     ));
-  }, [reservations]);
+  }, [reservations, mutate]);
 
   return (
     <CustomModal title='듀오 신청 목록' triggerName='듀오 신청 목록'>

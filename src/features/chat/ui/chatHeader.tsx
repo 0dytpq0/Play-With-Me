@@ -1,7 +1,7 @@
 'use client';
 
 import { genGradient } from '../lib/utils';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ChatHeaderProps {
   gameNickname: string;

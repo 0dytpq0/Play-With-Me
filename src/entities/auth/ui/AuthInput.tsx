@@ -5,20 +5,21 @@ import {
   FormMessage,
 } from '@/shared/ui/form';
 import { Input } from '@/shared/ui/Input';
+import { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 
-interface AuthInputProps {
-  form: any;
-  name: string;
+interface AuthInputProps<T extends FieldValues> {
+  form: UseFormReturn<T>;
+  name: Path<T>;
   placeholder: string;
   type?: string;
 }
 
-export function AuthInput({
+export function AuthInput<T extends FieldValues>({
   form,
   name,
   placeholder,
   type = 'text',
-}: AuthInputProps) {
+}: AuthInputProps<T>) {
   return (
     <FormField
       control={form.control}

@@ -14,7 +14,7 @@ export default function UserList({
       users.map((user: User) => {
         return <UserListItem key={user.id} user={user} userId={userId} />;
       }),
-    [users]
+    [users, userId]
   );
 
   return (
