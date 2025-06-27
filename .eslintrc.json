@@ -1,4 +1,11 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "next", "prettier"]
+  "extends": ["next/core-web-vitals", "next/typescript", "next", "prettier"],
+  "overrides": [
+    {
+      "files": ["*.test.ts", "*.test.tsx"],
+      "env": { "jest": true },
+      "plugins": ["jest"],
+      "extends": ["plugin:jest/recommended"]
+    }
+  ]
 }
-
