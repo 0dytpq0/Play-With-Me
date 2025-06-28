@@ -1,3 +1,11 @@
+export type Reservation = {
+  id: string;
+  sender_id: string;
+  target_id: string;
+  status: 'pending' | 'accepted' | 'rejected';
+  created_at: string;
+};
+
 export type ReservateFormType = {
   date: Date;
   gameType: 'competitive' | 'unrated' | 'swift';
